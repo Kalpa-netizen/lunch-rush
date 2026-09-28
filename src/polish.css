@@ -80,9 +80,24 @@ body {
   border-radius: 12px;
   padding: 14px;
   box-shadow: 0 12px 28px #0002;
+  text-align: center;
 }
 .qr-box img {
   max-width: 190px;
+}
+.qr-box span {
+  font-size: 9px;
+  color: #64716e;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.qr-box strong {
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #101c23;
+  font-weight: 900;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  display: block;
 }
 .join-url {
   color: #9bb1b9;

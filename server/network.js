@@ -50,14 +50,29 @@ export function attachGame(http, { autoTick = true } = {}) {
         throw Error("Host authorization required.");
       return room;
     }
+    const DEFAULT_ROOM_CODE = process.env.DEFAULT_ROOM_CODE || "NCI-CAFETERIA";
+
     handle("host:create", () => {
       if (socket.data.code)
         throw Error("This connection already belongs to a room.");
       if (rooms.size >= 100) throw Error("Server is full. Please try later.");
-      let code;
-      do {
-        code = String(randomInt(1000, 10000));
-      } while (rooms.has(code));
+      let code = DEFAULT_ROOM_CODE;
+      if (rooms.has(code)) {
+        const existing = rooms.get(code);
+        if (
+          !existing.hostSocket ||
+          !io.sockets.sockets.get(existing.hostSocket)?.connected
+        ) {
+          existing.hostSocket = socket.id;
+          socket.data = { code, role: "host" };
+          socket.join(code);
+          broadcast(existing);
+          return { code, hostToken: existing.hostToken };
+        }
+        do {
+          code = String(randomInt(1000, 10000));
+        } while (rooms.has(code));
+      }
       const room = createRoom(code);
       rooms.set(code, room);
       room.hostSocket = socket.id;
@@ -68,7 +83,8 @@ export function attachGame(http, { autoTick = true } = {}) {
     });
     handle("host:resume", (data) => {
       if (socket.data.code) throw Error("Already attached to a room.");
-      const room = rooms.get(data.code);
+      const lookupCode = String(data.code || "").trim().toUpperCase();
+      const room = rooms.get(lookupCode) || rooms.get(data.code);
       if (!room || room.hostToken !== data.hostToken)
         throw Error("Room expired. Create a new room.");
       const old = room.hostSocket;
@@ -81,9 +97,10 @@ export function attachGame(http, { autoTick = true } = {}) {
       return { code: room.code, hostToken: room.hostToken };
     });
     handle("player:join", (data) => {
-      if (socket.data.code && socket.data.code !== String(data.code))
+      const lookupCode = String(data.code || "").trim().toUpperCase();
+      if (socket.data.code && socket.data.code !== lookupCode)
         throw Error("Already attached to a room.");
-      const room = rooms.get(String(data.code));
+      const room = rooms.get(lookupCode) || rooms.get(String(data.code));
       if (!room) throw Error("Room not found. Scan the TV’s current QR code.");
       let player = data.token
         ? room.players.find((p) => p.token === data.token)

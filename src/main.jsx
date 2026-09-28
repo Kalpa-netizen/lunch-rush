@@ -49,7 +49,7 @@ function App() {
   const [state, setState] = useState(null),
     [connected, setConnected] = useState(false),
     [error, setError] = useState("");
-  const code = location.pathname.match(/^\/join\/(\d{4})\/?$/)?.[1];
+  const code = location.pathname.match(/^\/join\/([a-zA-Z0-9_-]+)\/?$/)?.[1]?.toUpperCase();
   useEffect(() => {
     const onConnect = () => {
         setConnected(true);
@@ -579,7 +579,7 @@ function Host({ state, connected, error, setError }) {
             )}
             <div>
               <span>SCAN TO JOIN</span>
-              <strong>ROOM {credentials?.code || "—"}</strong>
+              <strong>{credentials?.code || "NCI-CAFETERIA"}</strong>
             </div>
           </div>
           <a className="join-url" href={url} target="_blank" rel="noreferrer">
