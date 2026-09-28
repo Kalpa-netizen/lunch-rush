@@ -16,14 +16,18 @@ import {
 } from "../../shared/track.js";
 export function createWorld() {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x9dd6ed);
-  scene.fog = new THREE.Fog(0xb9dce9, 200, 800);
-  scene.add(new THREE.HemisphereLight(0xe6f7ff, 0x8b9c68, 2.25));
-  const sun = new THREE.DirectionalLight(0xffecd0, 3.0);
-  sun.position.set(-400, 750, -150);
-  sun.target.position.set(280, 0, 620);
-  scene.add(sun, sun.target);
-  sun.castShadow = false;
+  // Atmospheric Midnight Blue Sky and Night Fog
+  scene.background = new THREE.Color(0x070b14);
+  scene.fog = new THREE.Fog(0x09101c, 140, 720);
+
+  // Silvery Moonlight & Night Ambience
+  scene.add(new THREE.HemisphereLight(0x364a66, 0x0a111a, 2.1));
+  const moon = new THREE.DirectionalLight(0x7ea5d6, 1.85);
+  moon.position.set(-380, 720, -140);
+  moon.target.position.set(280, 0, 620);
+  scene.add(moon, moon.target);
+  moon.castShadow = false;
+
   const materials = new Map(),
     boxGeo = new THREE.BoxGeometry(1, 1, 1),
     dummy = new THREE.Object3D();
@@ -64,15 +68,42 @@ export function createWorld() {
     scene.add(inst);
     return inst;
   }
+
+  // Twinkling Starfield in the Night Sky
+  const starGeo = new THREE.BufferGeometry();
+  const starCount = 350;
+  const starPositions = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    const u = Math.random();
+    const v = Math.random();
+    const theta = u * 2.0 * Math.PI;
+    const phi = Math.acos(2.0 * v - 1.0);
+    const r = 900 + Math.random() * 300;
+    starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta) + 300;
+    starPositions[i * 3 + 1] = Math.abs(r * Math.cos(phi)) + 120; // High in the sky
+    starPositions[i * 3 + 2] = r * Math.sin(phi) * Math.sin(theta) + 650;
+  }
+  starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+  const starMat = new THREE.PointsMaterial({
+    color: 0xeaf2ff,
+    size: 2.2,
+    transparent: true,
+    opacity: 0.85,
+  });
+  const stars = new THREE.Points(starGeo, starMat);
+  scene.add(stars);
+
+  // Nocturnal ground plane
   const ground = mesh(
     new THREE.PlaneGeometry(4200, 4200),
-    mat(0x98b878),
+    mat(0x0c1411, 0.1, 0.9),
     300,
     -0.3,
     650,
   );
   ground.rotation.x = -Math.PI / 2;
   ground.castShadow = false;
+
   // Continuous asphalt, wide shoulders and sidewalks follow the server's route.
   function ribbon(
     laneA,
@@ -104,45 +135,81 @@ export function createWorld() {
     road.castShadow = false;
     return road;
   }
-  ribbon(-18, 18, 0, 0xbfc5c0);
-  ribbon(-12, 12, 0.08, 0x34454f);
-  ribbon(-11.4, -11.15, 0.11, 0xfff2be);
-  ribbon(11.15, 11.4, 0.11, 0xfff2be);
+
+  // Dark sleek night asphalt and glowing reflective edge lines
+  ribbon(-18, 18, 0, 0x161d23); // Night sidewalk
+  ribbon(-12, 12, 0.08, 0x0f1318); // Night asphalt road
+  ribbon(-11.4, -11.15, 0.11, 0xffc43d); // Reflective golden amber road edge
+  ribbon(11.15, 11.4, 0.11, 0xffc43d); // Reflective golden amber road edge
+
   const dashes = [],
     curbs = [],
     lamps = [],
     lampArms = [],
     lampHeads = [],
+    lampCones = [],
+    lampRoadPools = [],
     treeTrunks = [],
     treeCrowns = [],
     bridgeRails = [],
-    bridgePosts = [];
+    bridgePosts = [],
+    beaconLights = [];
+
   for (let d = 10; d < TRACK.length; d += 14) {
     const p = trackPoint(d);
     dashes.push({ ...p, y: p.y + 0.12 });
   }
-  instances(new THREE.BoxGeometry(0.22, 0.025, 5), mat(0xf8eed2), dashes);
+  // High-visibility reflective road centerline dashes
+  instances(new THREE.BoxGeometry(0.24, 0.03, 5), mat(0xffeb8a), dashes);
+
   for (let d = -30; d < TRACK.length + 40; d += 5)
     for (const lane of [-12.7, 12.7]) {
       const p = trackPoint(d, lane);
       curbs.push({
         ...p,
         y: p.y + 0.24,
-        color: Math.floor(d / 5) % 2 ? 0xe9e4cf : 0x5c6670,
+        color: Math.floor(d / 5) % 2 ? 0xffb703 : 0x222a33,
       });
     }
   instances(new THREE.BoxGeometry(1, 0.45, 4.95), mat(0xffffff), curbs);
-  for (let d = 40; d < TRACK.length; d += 70) {
+
+  // DENSE STREETLIGHTS WITH GLOWING LANTERNS, VOLUMETRIC LIGHT CONES & ROAD LIGHT POOLS
+  for (let d = 30; d < TRACK.length; d += 45) {
     for (const lane of [-17, 17]) {
       const p = trackPoint(d, lane);
       lamps.push({ ...p, y: p.y + 7 });
-      const arm = trackPoint(d, lane + (lane > 0 ? -1.5 : 1.5));
+      const arm = trackPoint(d, lane + (lane > 0 ? -1.8 : 1.8));
       lampArms.push({ ...arm, y: p.y + 13.8 });
+
+      const headPos = trackPoint(d, lane + (lane > 0 ? -3.6 : 3.6));
       lampHeads.push({
-        ...trackPoint(d, lane + (lane > 0 ? -3 : 3)),
+        ...headPos,
         y: p.y + 13.6,
       });
+
+      // Volumetric warm golden light cone shining down from each lamp head
+      lampCones.push({
+        x: headPos.x,
+        y: p.y + 6.8,
+        z: headPos.z,
+        angle: p.angle,
+        sx: 5.6,
+        sy: 13.6,
+        sz: 5.6,
+      });
+
+      // Glowing warm pool of light illuminated on the asphalt road
+      lampRoadPools.push({
+        x: headPos.x,
+        y: p.y + 0.11,
+        z: headPos.z,
+        angle: p.angle,
+        sx: 11.5,
+        sy: 0.02,
+        sz: 14.0,
+      });
     }
+
     if (d > CULVERT.start - 80 && d < CULVERT.end + 80) continue;
     for (const lane of [-24, 25]) {
       const p = trackPoint(d + 20, lane);
@@ -153,53 +220,103 @@ export function createWorld() {
         sx: 3.8,
         sy: 5,
         sz: 3.8,
-        color: Math.floor(d) % 3 ? 0x418d65 : 0x74a760,
+        color: Math.floor(d) % 3 ? 0x143826 : 0x1d4732,
       });
     }
   }
+
+  // Streetlight Posts & Arms
   instances(
-    new THREE.CylinderGeometry(0.16, 0.25, 14, 6),
-    mat(0x566d79, 0.5),
+    new THREE.CylinderGeometry(0.18, 0.28, 14, 6),
+    mat(0x28323c, 0.6, 0.3),
     lamps,
   );
   instances(
-    new THREE.BoxGeometry(3.4, 0.22, 0.22),
-    mat(0x566d79, 0.5),
+    new THREE.BoxGeometry(3.8, 0.24, 0.24),
+    mat(0x28323c, 0.6, 0.3),
     lampArms,
   );
+
+  // Streetlight Glowing Lantern Heads
   instances(
-    new THREE.BoxGeometry(1.7, 0.25, 0.8),
-    new THREE.MeshBasicMaterial({ color: 0xfff3c6 }),
+    new THREE.BoxGeometry(1.8, 0.28, 0.9),
+    new THREE.MeshBasicMaterial({ color: 0xffe277 }),
     lampHeads,
   );
+
+  // Volumetric Streetlight Cones
+  const coneGeo = new THREE.CylinderGeometry(0.8, 6.2, 1, 14, 1, true);
+  const coneMat = new THREE.MeshBasicMaterial({
+    color: 0xffcf68,
+    transparent: true,
+    opacity: 0.13,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  instances(coneGeo, coneMat, lampCones);
+
+  // Streetlight Road Illumination Puddles (Asphalt Light Pools)
+  const roadPoolMat = new THREE.MeshBasicMaterial({
+    color: 0xffd373,
+    transparent: true,
+    opacity: 0.24,
+    depthWrite: false,
+  });
+  instances(boxGeo, roadPoolMat, lampRoadPools);
+
   instances(
     new THREE.CylinderGeometry(0.45, 0.65, 5.5, 6),
-    mat(0x8d694b),
+    mat(0x3d2c1f),
     treeTrunks,
   );
   instances(new THREE.IcosahedronGeometry(1, 1), mat(0xffffff), treeCrowns);
-  // Skyline blocks are original low-poly geometry; instancing keeps six cameras affordable.
+
+  // ILLUMINATED NIGHT SKYLINE & GLOWING OFFICE WINDOWS
   const towers = [],
     windows = [];
-  const colors = [0xb1cbc9, 0xe0cbb0, 0x83a7b6, 0xc9bcb8, 0x668e9c];
-  for (let d = 90, i = 0; d < TRACK.length - 130; d += 100, i++) {
+  const nightBuildingColors = [
+    0x0d1520, 0x131d2b, 0x182433, 0x101b26, 0x1c2838,
+  ];
+  const windowColors = [
+    0xffd666, // Warm office gold glow
+    0x38bdf8, // Cool tech cyan glow
+    0xfffae8, // Bright white glow
+    0x08131e, // Dark non-lit window
+    0xffab40, // Warm amber glow
+  ];
+
+  for (let d = 90, i = 0; d < TRACK.length - 130; d += 95, i++) {
     if (d > CULVERT.start - 140 && d < CULVERT.end + 120) continue;
     for (const side of [-1, 1]) {
       const p = trackPoint(d, side * (49 + (i % 3) * 9)),
         w = 25 + (i % 3) * 8,
         depth = 24 + (i % 2) * 12,
-        h = 24 + ((i * 13 + side * 7 + 100) % 6) * 13;
+        h = 26 + ((i * 13 + side * 7 + 100) % 6) * 14;
       towers.push({
         ...p,
         y: h / 2,
         sx: w,
         sy: h,
         sz: depth,
-        color: colors[(i + (side === 1 ? 1 : 0)) % colors.length],
+        color:
+          nightBuildingColors[(i + (side === 1 ? 1 : 0)) % nightBuildingColors.length],
       });
+
+      // Rooftop Aviation Obstruction Red Beacons
+      if (h > 50) {
+        beaconLights.push({
+          x: p.x,
+          y: h + 1.2,
+          z: p.z,
+          sx: 1.2,
+          sy: 1.2,
+          sz: 1.2,
+        });
+      }
+
       const cos = Math.cos(p.angle),
         sin = Math.sin(p.angle);
-      // Bands of reflective windows on all four façades.
+      // Bands of glowing illuminated night windows
       for (let y = 6; y < h - 3; y += 7)
         for (const face of [0, 1, 2, 3]) {
           const normal = face < 2 ? 0 : Math.PI / 2,
@@ -215,15 +332,25 @@ export function createWorld() {
               sx: 3.1,
               sy: 3.6,
               sz: 0.1,
-              color: (i + face + Math.floor(y)) % 3 ? 0x396377 : 0xd4e8dc,
+              color: windowColors[(i * 7 + face * 3 + Math.floor(y)) % windowColors.length],
             });
           }
         }
     }
   }
+
   instances(boxGeo, mat(0xffffff), towers);
-  const windowInstances = instances(boxGeo, mat(0xffffff, 0.35, 0.25), windows);
+  const windowInstances = instances(
+    boxGeo,
+    new THREE.MeshBasicMaterial({ color: 0xffffff }),
+    windows,
+  );
   windowInstances.castShadow = false;
+
+  // Red rooftop aviation warning beacons
+  const beaconMat = new THREE.MeshBasicMaterial({ color: 0xff3344 });
+  const beaconMesh = instances(boxGeo, beaconMat, beaconLights);
+  beaconMesh.castShadow = false;
   // Local buildings are kept clear of other road segments and the bridge surface.
   function signTexture(text, bg = "#134b51", fg = "#fff2c6") {
     const c = document.createElement("canvas");
@@ -647,12 +774,12 @@ export function createWorld() {
     WET_ZONE.lane - WET_ZONE.halfWidth,
     WET_ZONE.lane + WET_ZONE.halfWidth,
     0.15,
-    0x559aac,
+    0x153545,
     WET_ZONE.start,
     WET_ZONE.end,
   );
-  puddle.material.roughness = 0.15;
-  puddle.material.metalness = 0.5;
+  puddle.material.roughness = 0.08;
+  puddle.material.metalness = 0.75;
   const checks = [];
   for (const start of [0, TRACK.length])
     for (let x = 0; x < 12; x++)
@@ -665,7 +792,7 @@ export function createWorld() {
         });
       }
   instances(new THREE.BoxGeometry(2, 0.025, 1.5), mat(0xffffff), checks);
-  // Distant city silhouettes fill the horizon without drawing a miniature tabletop.
+  // Distant nocturnal city silhouettes on the horizon
   const distant = [];
   for (let i = 0; i < 36; i++) {
     const a = (i / 36) * Math.PI * 2,
@@ -677,7 +804,7 @@ export function createWorld() {
       sx: 60 + (i % 3) * 20,
       sy: h,
       sz: 65,
-      color: i % 2 ? 0x779bac : 0x91acb8,
+      color: i % 2 ? 0x08101a : 0x0e1724,
     });
   }
   instances(boxGeo, mat(0xffffff), distant);

@@ -161,7 +161,7 @@ export default function Track({ state }) {
       world.update(time);
       renderer.setScissorTest(false);
       renderer.setViewport(0, 0, el.clientWidth, el.clientHeight);
-      renderer.setClearColor(0x122a31);
+      renderer.setClearColor(0x070b14);
       renderer.clear();
       renderer.setScissorTest(true);
       rendered

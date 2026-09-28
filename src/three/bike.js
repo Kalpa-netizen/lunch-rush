@@ -509,7 +509,7 @@ export function createBike(color) {
   windshield.rotation.z = Math.PI;
   windshield.rotation.x = 0.65;
 
-  // Hawk-Eye Dual Angular LED Headlights
+  // Hawk-Eye Dual Angular LED Headlights with projective road beams
   for (const side of [-1, 1]) {
     const headlight = addMesh(
       new THREE.BoxGeometry(0.18, 0.08, 0.15),
@@ -521,6 +521,37 @@ export function createBike(color) {
     headlight.rotation.y = side * 0.22;
     headlight.rotation.x = 0.25;
   }
+
+  // Forward projective headlight beam cone (volumetric night light)
+  const beamMat = new THREE.MeshBasicMaterial({
+    color: 0xfffae6,
+    transparent: true,
+    opacity: 0.22,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  const headlightBeam = new THREE.Mesh(
+    new THREE.ConeGeometry(3.8, 24, 16, 1, true),
+    beamMat,
+  );
+  headlightBeam.position.set(0, 0.95, 12.2);
+  headlightBeam.rotation.x = -Math.PI / 2 + 0.07;
+  body.add(headlightBeam);
+
+  // Bright road light spot pool in front of the bike
+  const roadSpotMat = new THREE.MeshBasicMaterial({
+    color: 0xfff4cc,
+    transparent: true,
+    opacity: 0.3,
+    depthWrite: false,
+  });
+  const roadSpot = new THREE.Mesh(
+    new THREE.PlaneGeometry(6.5, 15),
+    roadSpotMat,
+  );
+  roadSpot.position.set(0, 0.08, 12);
+  roadSpot.rotation.x = -Math.PI / 2;
+  body.add(roadSpot);
 
   // Lower Belly Fairing / Aero Winglets
   const bellyPan = addMesh(
