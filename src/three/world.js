@@ -14,19 +14,22 @@ import {
   ITEM_BOXES,
   trackPoint,
 } from "../../shared/track.js";
-export function createWorld() {
+export function createWorld(initialTheme = "night") {
+  let currentTheme = initialTheme === "day" ? "day" : "night";
   const scene = new THREE.Scene();
-  // Atmospheric Midnight Blue Sky and Night Fog
+
+  // Sky and Fog Setup
+  const hemiLight = new THREE.HemisphereLight(0x364a66, 0x0a111a, 2.1);
+  scene.add(hemiLight);
+
+  const mainLight = new THREE.DirectionalLight(0x7ea5d6, 1.85);
+  mainLight.position.set(-380, 720, -140);
+  mainLight.target.position.set(280, 0, 620);
+  scene.add(mainLight, mainLight.target);
+  mainLight.castShadow = false;
+
   scene.background = new THREE.Color(0x070b14);
   scene.fog = new THREE.Fog(0x09101c, 140, 720);
-
-  // Silvery Moonlight & Night Ambience
-  scene.add(new THREE.HemisphereLight(0x364a66, 0x0a111a, 2.1));
-  const moon = new THREE.DirectionalLight(0x7ea5d6, 1.85);
-  moon.position.set(-380, 720, -140);
-  moon.target.position.set(280, 0, 620);
-  scene.add(moon, moon.target);
-  moon.castShadow = false;
 
   const materials = new Map(),
     boxGeo = new THREE.BoxGeometry(1, 1, 1),
@@ -93,7 +96,7 @@ export function createWorld() {
   const stars = new THREE.Points(starGeo, starMat);
   scene.add(stars);
 
-  // Nocturnal ground plane
+  // Ground plane
   const ground = mesh(
     new THREE.PlaneGeometry(4200, 4200),
     mat(0x0c1411, 0.1, 0.9),
@@ -136,11 +139,11 @@ export function createWorld() {
     return road;
   }
 
-  // Dark sleek night asphalt and glowing reflective edge lines
-  ribbon(-18, 18, 0, 0x161d23); // Night sidewalk
-  ribbon(-12, 12, 0.08, 0x0f1318); // Night asphalt road
-  ribbon(-11.4, -11.15, 0.11, 0xffc43d); // Reflective golden amber road edge
-  ribbon(11.15, 11.4, 0.11, 0xffc43d); // Reflective golden amber road edge
+  // Asphalt ribbons
+  const sidewalkRibbon = ribbon(-18, 18, 0, 0x161d23);
+  const roadRibbon = ribbon(-12, 12, 0.08, 0x0f1318);
+  const edgeRibbonL = ribbon(-11.4, -11.15, 0.11, 0xffc43d);
+  const edgeRibbonR = ribbon(11.15, 11.4, 0.11, 0xffc43d);
 
   const dashes = [],
     curbs = [],
@@ -862,8 +865,46 @@ export function createWorld() {
   });
   const pizzaToppingMat = new THREE.MeshBasicMaterial({ color: 0xd97706 });
 
+  function applyTheme(theme) {
+    currentTheme = theme === "day" ? "day" : "night";
+    const isNight = currentTheme === "night";
+
+    scene.background.setHex(isNight ? 0x070b14 : 0x9dd6ed);
+    scene.fog.color.setHex(isNight ? 0x09101c : 0xb9dce9);
+    scene.fog.near = isNight ? 140 : 200;
+    scene.fog.far = isNight ? 720 : 800;
+
+    hemiLight.color.setHex(isNight ? 0x364a66 : 0xe6f7ff);
+    hemiLight.groundColor.setHex(isNight ? 0x0a111a : 0x8b9c68);
+    hemiLight.intensity = isNight ? 2.1 : 2.25;
+
+    mainLight.color.setHex(isNight ? 0x7ea5d6 : 0xffecd0);
+    mainLight.intensity = isNight ? 1.85 : 3.0;
+
+    stars.visible = isNight;
+    ground.material.color.setHex(isNight ? 0x0c1411 : 0x98b878);
+
+    sidewalkRibbon.material.color.setHex(isNight ? 0x161d23 : 0xbfc5c0);
+    roadRibbon.material.color.setHex(isNight ? 0x0f1318 : 0x34454f);
+    edgeRibbonL.material.color.setHex(isNight ? 0xffc43d : 0xfff2be);
+    edgeRibbonR.material.color.setHex(isNight ? 0xffc43d : 0xfff2be);
+
+    coneMat.opacity = isNight ? 0.13 : 0.0;
+    roadPoolMat.opacity = isNight ? 0.24 : 0.0;
+    beaconMesh.visible = isNight;
+  }
+
+  // Initialize with the chosen theme
+  applyTheme(currentTheme);
+
   return {
     scene,
+    get theme() {
+      return currentTheme;
+    },
+    setTheme(theme) {
+      applyTheme(theme);
+    },
     renderEntities(hazards = [], projectiles = []) {
       // Clear dynamic meshes
       while (dynamicGroup.children.length > 0) {

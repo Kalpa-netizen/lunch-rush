@@ -36,6 +36,17 @@ body {
   min-height: 36px;
   color: #e6eeed;
 }
+.theme-toggle-btn {
+  background: #1e323d !important;
+  border: 1px solid #38bdf833 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+  transition: all 0.2s ease;
+}
+.theme-toggle-btn:hover {
+  background: #2a4352 !important;
+  border-color: #38bdf888 !important;
+}
 .host .connection {
   border-color: #b3e77928;
   color: #cdebaa;

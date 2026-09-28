@@ -40,17 +40,27 @@ export function viewRiders(state) {
       }))
     : [previewRider];
 }
-export default function Track({ state }) {
+export default function Track({ state, theme = "night" }) {
   const mount = useRef(),
     latest = useRef(state),
     previous = useRef(state),
     received = useRef(performance.now()),
+    worldRef = useRef(null),
+    themeRef = useRef(theme),
     [error, setError] = useState("");
+
+  themeRef.current = theme;
+
   useEffect(() => {
     previous.current = latest.current;
     latest.current = state;
     received.current = performance.now();
   }, [state]);
+
+  useEffect(() => {
+    worldRef.current?.setTheme(theme);
+  }, [theme]);
+
   const allRiders = viewRiders(state),
     riders = allRiders.filter((p) => !p.isBot),
     cols = riders.length <= 1 ? 1 : riders.length <= 4 ? 2 : 3,
@@ -80,9 +90,10 @@ export default function Track({ state }) {
     );
     renderer.domElement.className = "race-webgl";
     el.appendChild(renderer.domElement);
-    const world = createWorld(),
+    const world = createWorld(themeRef.current),
       bikes = new Map(),
       cameras = new Map();
+    worldRef.current = world;
     let raf,
       last = performance.now(),
       lastDraw = 0,
@@ -161,7 +172,7 @@ export default function Track({ state }) {
       world.update(time);
       renderer.setScissorTest(false);
       renderer.setViewport(0, 0, el.clientWidth, el.clientHeight);
-      renderer.setClearColor(0x070b14);
+      renderer.setClearColor(themeRef.current === "day" ? 0x9dd6ed : 0x070b14);
       renderer.clear();
       renderer.setScissorTest(true);
       rendered

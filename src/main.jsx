@@ -196,6 +196,7 @@ function LeaderboardModal({ leaderboard, onClose }) {
 
 function Host({ state, connected, error, setError }) {
   const [credentials, setCredentials] = useState(() => saved("lr-host")),
+    [theme, setTheme] = useState(() => saved("lr-theme") || "night"),
     [base, setBase] = useState(""),
     [addresses, setAddresses] = useState([]),
     [qr, setQr] = useState(""),
@@ -327,6 +328,17 @@ function Host({ state, connected, error, setError }) {
         </div>
         <div className="host-tools">
           <button
+            className="theme-toggle-btn"
+            title="Toggle between Day and Night theme"
+            onClick={() => {
+              const next = theme === "night" ? "day" : "night";
+              setTheme(next);
+              save("lr-theme", next);
+            }}
+          >
+            {theme === "night" ? "🌙 NIGHT" : "☀️ DAY"}
+          </button>
+          <button
             className="leaderboard-toggle-btn"
             onClick={() => setShowLeaderboard(true)}
           >
@@ -389,7 +401,7 @@ function Host({ state, connected, error, setError }) {
                 <div className="loading-world">Loading the city route…</div>
               }
             >
-              <Track state={state} />
+              <Track state={state} theme={theme} />
             </React.Suspense>
             {!racing && !results && (
               <div className="track-label">
