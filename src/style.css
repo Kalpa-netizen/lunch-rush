@@ -1,0 +1,2086 @@
+:root {
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: #f4f3e9;
+  background: #152320;
+  font-synthesis: none;
+  font-weight: 400;
+  --lime: #d8fa71;
+  --muted: #93a59b;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+  color: inherit;
+  background: #293b34;
+  border: 1px solid #536258;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid var(--lime);
+  outline-offset: 4px;
+}
+button:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+.brand,
+.control b {
+  font-family: "Barlow Condensed", "Arial Narrow", Impact, sans-serif;
+}
+a {
+  color: inherit;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.host {
+  padding: 25px 34px 18px;
+  min-height: 100dvh;
+  max-width: 2100px;
+  margin: auto;
+}
+.brand {
+  font-size: 38px;
+  letter-spacing: -1.8px;
+  line-height: 0.95;
+  white-space: nowrap;
+  transform: skew(-6deg);
+  font-weight: 900;
+}
+.brand span {
+  color: var(--lime);
+  margin-left: 5px;
+}
+.brand i {
+  font-size: 32px;
+  color: var(--lime);
+  margin-left: 7px;
+}
+.edition {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #a4b5a8;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.dot {
+  background: var(--lime);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.host-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.host-tools button {
+  border: 0;
+  background: none;
+  font-size: 22px;
+  padding: 5px 9px;
+  color: #a9b8ad;
+}
+.connection {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  border: 1px solid #45634c;
+  border-radius: 30px;
+  padding: 8px 12px;
+  color: var(--lime);
+}
+.connection:before {
+  content: "●";
+  margin-right: 7px;
+}
+.offline {
+  color: #ffab80;
+}
+.host-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  gap: 30px;
+  margin-top: 27px;
+}
+.game-panel {
+  min-width: 0;
+}
+.track-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #a2b59b;
+}
+.track-heading h2 {
+  font-size: 29px;
+  letter-spacing: 0.3px;
+  margin-top: 5px;
+}
+.track-heading h2 span {
+  color: var(--lime);
+  margin-left: 8px;
+}
+.tag {
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 9px 12px;
+  background: #293a31;
+  border-radius: 4px;
+  white-space: nowrap;
+  color: #d3e2c7;
+}
+.canvas-wrap {
+  position: relative;
+  border: 1px solid #a6aa85;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #ddcaa5;
+  aspect-ratio: 1200/760;
+}
+.track {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+.track-label {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f4eddbde;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: #56604b;
+  font-size: 9px;
+  letter-spacing: 1.7px;
+  white-space: nowrap;
+}
+.track-label strong {
+  color: #213c2f;
+}
+.track-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 8px;
+  letter-spacing: 1.3px;
+  color: #82968b;
+  margin-top: 11px;
+}
+.join-title {
+  margin-top: 0;
+}
+.join-title h1 {
+  font-size: 52px;
+  line-height: 0.96;
+  text-transform: uppercase;
+  margin: 10px 0 20px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+.join-title em {
+  color: var(--lime);
+  font-style: normal;
+}
+.qr-box {
+  border-radius: 10px;
+  background: #f7f8ee;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: #152320;
+}
+.qr-box img {
+  width: 100%;
+  max-width: 215px;
+  aspect-ratio: 1;
+  image-rendering: pixelated;
+}
+.qr-box > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin: 4px;
+}
+.qr-box span {
+  font-size: 10px;
+  letter-spacing: 2.5px;
+}
+.qr-box strong {
+  font-size: 24px;
+  letter-spacing: 3px;
+  font-family: "Barlow Condensed", Impact, sans-serif;
+}
+.qr-loading {
+  height: 230px;
+  justify-content: center;
+}
+.join-url {
+  display: block;
+  font-size: 10px;
+  color: #c2d3ba;
+  text-align: center;
+  margin-top: 11px;
+  overflow-wrap: anywhere;
+}
+.wifi-note {
+  font-size: 11px;
+  color: #97aa9c;
+  text-align: center;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+.join-rule {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #364b3b;
+  padding-top: 12px;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--lime);
+}
+.lobby {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 25px;
+  border-top: 1px solid #3a4b3d;
+  padding-top: 22px;
+}
+.lobby-title {
+  min-width: 160px;
+}
+.lobby-title h3 {
+  font-size: 24px;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+.lobby-title h3 span {
+  color: #657c6a;
+}
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 9px;
+  flex: 1;
+}
+.player-card {
+  min-height: 72px;
+  padding: 12px 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px dashed #4b5b48;
+  border-radius: 8px;
+  color: #8c9d86;
+  min-width: 0;
+}
+.player-card.filled {
+  justify-content: flex-start;
+  border: 1px solid #526348;
+  background: #26382e;
+}
+.helmet {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--rider);
+  color: #152320;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  flex-shrink: 0;
+  font-weight: 900;
+}
+.player-card strong {
+  font-size: 12px;
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 85px;
+  color: #f3f3e2;
+}
+.player-card small {
+  font-size: 7px;
+  letter-spacing: 0.7px;
+  display: block;
+  margin-top: 6px;
+  white-space: nowrap;
+}
+.player-card.filled small {
+  color: var(--rider);
+}
+.empty-plus {
+  font-size: 25px;
+}
+.host footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #7f9383;
+  letter-spacing: 1px;
+  margin-top: 21px;
+}
+.host footer span:last-child {
+  color: #b6cba5;
+  letter-spacing: 0;
+}
+.countdown,
+.go {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #14271ad6;
+  z-index: 2;
+}
+.countdown span {
+  font-size: 22px;
+  letter-spacing: 4px;
+}
+.countdown strong,
+.go {
+  font-family: "Barlow Condensed", Impact, sans-serif;
+  font-size: 170px;
+  line-height: 1.1;
+  color: var(--lime);
+}
+.countdown small {
+  color: #c9d4bb;
+}
+.go {
+  background: #14271a55;
+}
+.race-clock {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #152320e6;
+  border: 1px solid #879d72;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 27px;
+  font-variant-numeric: tabular-nums;
+}
+.race-clock small {
+  display: block;
+  font-size: 10px;
+  color: #c2d8a8;
+  text-align: right;
+}
+.results {
+  position: absolute;
+  inset: 0;
+  background: #152320ef;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+}
+.results h1 {
+  font-size: 55px;
+  text-transform: uppercase;
+  margin: 8px 0 20px;
+}
+.result-list {
+  width: 80%;
+  max-width: 480px;
+}
+.result-list > div {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid #47513c;
+}
+.result-list strong {
+  flex: 1;
+  text-align: left;
+}
+.result-list span {
+  font-variant-numeric: tabular-nums;
+}
+.results p {
+  font-size: 12px;
+  margin: 15px;
+}
+.notice {
+  position: fixed;
+  z-index: 20;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 90vw;
+  border: 1px solid #d9be6c;
+  background: #473b21;
+  color: #fff0c1;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-size: 14px;
+  text-align: center;
+}
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: #08150bc9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px;
+}
+.settings {
+  background: #1d3026;
+  border: 1px solid #617354;
+  border-radius: 15px;
+  padding: 28px;
+  width: 450px;
+  max-height: 90dvh;
+  overflow: auto;
+}
+.settings h2 {
+  font-size: 32px;
+}
+.settings p {
+  font-size: 12px;
+  color: #bbc8af;
+  margin: 10px 0;
+}
+.close {
+  float: right;
+}
+.settings label {
+  margin: 15px 0;
+  display: block;
+  font-size: 13px;
+}
+.settings input,
+.settings select {
+  width: 100%;
+  margin-top: 8px;
+}
+.settings .action-row {
+  display: flex;
+  gap: 6px;
+  margin: 20px 0;
+}
+.settings .action-row button {
+  font-size: 12px;
+}
+.kick {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+.primary {
+  background: var(--lime);
+  border: 0;
+  color: #152320;
+  font-weight: 800;
+  padding: 15px 22px;
+  border-radius: 7px;
+}
+.phone {
+  max-width: 650px;
+  margin: auto;
+  min-height: 100dvh;
+  padding: 25px;
+}
+.phone header .brand {
+  font-size: 30px;
+}
+.phone header {
+  margin-bottom: 40px;
+}
+.join-form > .eyebrow {
+  color: var(--lime);
+  font-size: 9px;
+}
+.join-form h1 {
+  font-size: 56px;
+  line-height: 1;
+  text-transform: uppercase;
+  margin: 12px 0 28px;
+}
+.join-form h1 em {
+  font-style: normal;
+  color: var(--lime);
+}
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 11px;
+}
+input,
+select {
+  border: 1px solid #52644e;
+  border-radius: 7px;
+  padding: 14px;
+  background: #23372b;
+  color: #f3f6e9;
+  outline-color: var(--lime);
+}
+.join-form input {
+  display: block;
+  width: 100%;
+  font-size: 22px;
+  margin: 9px 0 23px;
+  text-transform: uppercase;
+}
+.bike-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.bike-grid button {
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 12px 4px;
+}
+.bike-grid button span {
+  font-size: 26px;
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 900;
+  color: var(--rider);
+}
+.bike-grid .selected {
+  border: 2px solid var(--rider);
+  padding: 11px 3px;
+  background: #394c35;
+}
+.colors {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+.colors button {
+  width: 42px;
+  height: 42px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  padding: 0;
+  color: #16251c;
+  font-size: 22px;
+}
+.colors .selected {
+  outline: 2px solid #f3f3de;
+  outline-offset: 3px;
+}
+.join-button {
+  width: 100%;
+  letter-spacing: 1px;
+}
+.join-form > p {
+  font-size: 11px;
+  color: #9eaf93;
+  text-align: center;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+.phone.playing {
+  max-width: none;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  padding: max(10px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  display: flex;
+  flex-direction: column;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(30, 41, 59, 0.7) 0%, #080d14 100%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.015) 0,
+      rgba(255, 255, 255, 0.015) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+}
+
+/* =========================================
+   Cockpit Top Bar & Telemetry
+   ========================================= */
+.controller-cockpit-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 8px 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.cockpit-pilot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rider-status-dot {
+  background: var(--rider, #22c55e);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--rider, #22c55e);
+  border: 2px solid #fff;
+  flex-shrink: 0;
+}
+.pilot-meta {
+  display: flex;
+  flex-direction: column;
+}
+.pilot-meta strong {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #f8fafc;
+  line-height: 1.1;
+}
+.pilot-meta small {
+  font-size: 9px;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 1px;
+}
+.cockpit-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.telemetry-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.telemetry-label {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #64748b;
+}
+.rank-val {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--rider, #38bdf8);
+}
+.rank-val.rank-1 {
+  color: #fbbf24;
+  text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+.rank-val.rank-2 {
+  color: #e2e8f0;
+}
+.rank-val.rank-3 {
+  color: #f97316;
+}
+.racer-count {
+  font-size: 8px;
+  color: #64748b;
+  font-weight: 700;
+}
+.speed-digits {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+.speed-digits strong {
+  font-size: 18px;
+  font-family: monospace;
+  font-weight: 900;
+  color: #f8fafc;
+  line-height: 1;
+}
+.speed-digits small {
+  font-size: 8px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+.gear-badge {
+  font-size: 8px;
+  font-weight: 900;
+  background: #38bdf8;
+  color: #0f172a;
+  padding: 1px 4px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+.fullscreen-phone {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e2e8f0;
+  padding: 6px 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.fullscreen-phone:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================
+   RPM & Route Progress Strip
+   ========================================= */
+.controller-rpm-strip {
+  margin-top: 8px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+.rpm-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #22c55e 0%, #eab308 60%, #ef4444 100%);
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.8);
+  transition: width 0.08s ease-out;
+}
+.route-progress-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.route-track-line {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  position: relative;
+  overflow: visible;
+}
+.route-fill-line {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, var(--rider, #38bdf8));
+  border-radius: 999px;
+  transition: width 0.1s linear;
+}
+.route-rider-pin {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  line-height: 1;
+  filter: drop-shadow(0 0 4px #000);
+  transition: left 0.1s linear;
+}
+.route-text {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* =========================================
+   Controller Message & Status
+   ========================================= */
+.controller-message {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  padding: 8px 12px;
+  margin: 6px 0;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 8px;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+.controller-message.shield-active {
+  color: #38bdf8;
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+.controller-message.drafting-active {
+  color: #f97316;
+  border-color: #f97316;
+  background: rgba(249, 115, 22, 0.12);
+  text-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+}
+
+/* =========================================
+   Pro Gamepad Layout & Controls
+   ========================================= */
+.controls-gamepad {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  padding: 4px 0 8px;
+}
+.controls-gamepad.inactive {
+  opacity: 0.12;
+  pointer-events: none;
+}
+.steering-zone,
+.pedals-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+.steering-zone {
+  flex-direction: row;
+}
+.sub-pedals-row {
+  display: flex;
+  gap: 10px;
+  flex: 0.8;
+}
+.center-action-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  flex-shrink: 0;
+}
+.empty-item-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  width: 100%;
+  height: 80%;
+  padding: 10px;
+  text-align: center;
+}
+.slot-glow-icon {
+  font-size: 24px;
+  opacity: 0.3;
+}
+.slot-hint {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #64748b;
+}
+
+/* =========================================
+   Tactile Racing Buttons & Pedals
+   ========================================= */
+.control {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-radius: 18px;
+  touch-action: none;
+  min-width: 0;
+  box-shadow:
+    0 6px 0 #080d14,
+    0 10px 20px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  color: #f8fafc;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.05s ease,
+    box-shadow 0.05s ease,
+    filter 0.05s ease,
+    border-color 0.05s ease;
+}
+.control-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+}
+.control b {
+  font-size: clamp(28px, 6vw, 64px);
+  line-height: 1;
+  font-weight: 900;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+.control small {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  color: #94a3b8;
+}
+.control.pressed {
+  transform: translateY(5px);
+  box-shadow:
+    0 1px 0 #080d14,
+    0 4px 10px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.25);
+  border-color: #fff;
+}
+
+/* Steering Buttons */
+.control.steer-btn {
+  background: linear-gradient(180deg, #1e293b 0%, #111827 100%);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+.control.steer-btn b {
+  color: #38bdf8;
+}
+.control.steer-btn.pressed {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border-color: #38bdf8;
+  box-shadow:
+    0 1px 0 #0369a1,
+    0 0 15px rgba(56, 189, 248, 0.6);
+}
+.control.steer-btn.pressed b {
+  color: #fff;
+}
+
+/* Accelerator (Gas) Pedal */
+.control.gas-btn {
+  background: linear-gradient(180deg, #15803d 0%, #14532d 100%);
+  border-color: #4ade80;
+  color: #ffffff;
+  flex: 1.4;
+  box-shadow:
+    0 6px 0 #052e16,
+    0 10px 20px rgba(34, 197, 94, 0.25);
+}
+.control.gas-btn b {
+  color: #86efac;
+}
+.control.gas-btn small {
+  color: #dcfce7;
+}
+.control.gas-btn.pressed {
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  border-color: #bbf7d0;
+  box-shadow:
+    0 1px 0 #052e16,
+    0 0 20px rgba(74, 222, 128, 0.8);
+}
+.control.gas-btn.pressed b {
+  color: #fff;
+}
+
+/* Brake / Drift Pedal */
+.control.brake-btn {
+  background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
+  border-color: #f87171;
+  box-shadow:
+    0 6px 0 #280505,
+    0 8px 16px rgba(239, 68, 68, 0.2);
+}
+.control.brake-btn b {
+  color: #fca5a5;
+}
+.control.brake-btn small {
+  color: #fecaca;
+  font-size: 8px;
+}
+.control.brake-btn.pressed {
+  background: linear-gradient(180deg, #dc2626 0%, #991b1b 100%);
+  border-color: #fecaca;
+  box-shadow:
+    0 1px 0 #280505,
+    0 0 18px rgba(248, 113, 113, 0.7);
+}
+
+/* Nitro Boost Pedal */
+.control.boost-btn {
+  background: linear-gradient(180deg, #075985 0%, #0c4a6e 100%);
+  border-color: #38bdf8;
+  box-shadow:
+    0 6px 0 #082f49,
+    0 8px 16px rgba(56, 189, 248, 0.2);
+}
+.control.boost-btn b {
+  color: #7dd3fc;
+}
+.control.boost-btn small {
+  color: #e0f2fe;
+  font-size: 8px;
+}
+.control.boost-btn.pressed {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border-color: #bae6fd;
+  box-shadow:
+    0 1px 0 #082f49,
+    0 0 22px rgba(56, 189, 248, 0.9);
+}
+.boost-meter-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.boost-meter-fill {
+  height: 100%;
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+  transition: width 0.08s ease-out;
+}
+
+/* Tactical Power-Up Launch Button */
+.control.item-btn {
+  width: 100%;
+  height: 90%;
+  background: linear-gradient(180deg, #854d0e 0%, #451a03 100%);
+  border: 2px solid #facc15;
+  box-shadow:
+    0 6px 0 #291204,
+    0 0 20px rgba(250, 204, 21, 0.4);
+  animation: itemPulse 1.2s infinite alternate ease-in-out;
+}
+@keyframes itemPulse {
+  0% {
+    transform: scale(1);
+    box-shadow:
+      0 6px 0 #291204,
+      0 0 15px rgba(250, 204, 21, 0.3);
+  }
+  100% {
+    transform: scale(1.03);
+    box-shadow:
+      0 6px 0 #291204,
+      0 0 25px rgba(250, 204, 21, 0.8);
+  }
+}
+.control.item-btn.item-btn-shield {
+  background: linear-gradient(180deg, #0284c7 0%, #082f49 100%);
+  border-color: #38bdf8;
+}
+.control.item-btn.item-btn-espresso {
+  background: linear-gradient(180deg, #ea580c 0%, #7c2d12 100%);
+  border-color: #fb923c;
+}
+.control.item-btn.item-btn-donut {
+  background: linear-gradient(180deg, #db2777 0%, #700738 100%);
+  border-color: #f472b6;
+}
+.control.item-btn.item-btn-pizza {
+  background: linear-gradient(180deg, #dc2626 0%, #7f1d1d 100%);
+  border-color: #f87171;
+}
+.control.item-btn .control-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+.control.item-btn b {
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+.control.item-btn small {
+  font-size: 9px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* =========================================
+   Controller Footer Bar
+   ========================================= */
+.controller-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #64748b;
+  padding: 4px 4px 0;
+}
+
+/* =========================================
+   Ready Overlay Screen
+   ========================================= */
+.ready-overlay {
+  position: absolute;
+  z-index: 20;
+  inset: 70px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  text-align: center;
+}
+.your-bike-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 12px 24px;
+  margin-bottom: 4px;
+}
+.your-bike-icon {
+  font-size: 40px;
+  filter: drop-shadow(0 0 10px var(--rider, #38bdf8));
+}
+.your-bike-name {
+  font-size: 18px;
+  font-weight: 900;
+  color: #f8fafc;
+}
+.your-bike-specs {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--rider, #38bdf8);
+}
+.ready-overlay h2 {
+  font-size: 26px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #f8fafc;
+  margin: 0;
+}
+.ready-overlay p {
+  font-size: 13px;
+  color: #94a3b8;
+  max-width: 320px;
+  line-height: 1.4;
+  margin: 0;
+}
+.ready-overlay button.primary {
+  width: 100%;
+  max-width: 280px;
+  font-size: 16px;
+  font-weight: 900;
+  padding: 16px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  color: #ffffff;
+  border: 2px solid #86efac;
+  box-shadow:
+    0 6px 0 #14532d,
+    0 10px 25px rgba(34, 197, 94, 0.4);
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.ready-overlay button.primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #14532d;
+}
+.ready-overlay button.primary.ready-btn-active {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border-color: #7dd3fc;
+  box-shadow:
+    0 6px 0 #0c4a6e,
+    0 10px 25px rgba(56, 189, 248, 0.4);
+}
+.ready-overlay button.solo-button {
+  background: linear-gradient(180deg, #475569 0%, #334155 100%);
+  border-color: #94a3b8;
+  box-shadow: 0 6px 0 #1e293b;
+  font-size: 13px;
+  padding: 12px;
+}
+@media (min-width: 1650px) {
+  .host {
+    padding: 35px 45px;
+  }
+  .host-content {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 40px;
+  }
+  .join-title h1 {
+    font-size: 70px;
+  }
+  .qr-box img {
+    max-width: 290px;
+  }
+  .player-card {
+    min-height: 85px;
+  }
+  .player-card strong {
+    font-size: 17px;
+    max-width: 140px;
+  }
+  .player-card small {
+    font-size: 9px;
+  }
+  .lobby-title h3 {
+    font-size: 30px;
+  }
+  .track-footer,
+  .host footer {
+    font-size: 11px;
+  }
+  .edition {
+    font-size: 13px;
+  }
+  .brand {
+    font-size: 48px;
+  }
+}
+@media (max-width: 1100px) {
+  .host {
+    padding: 20px;
+  }
+  .host-content {
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 20px;
+  }
+  .join-title h1 {
+    font-size: 42px;
+  }
+  .qr-box img {
+    max-width: 165px;
+  }
+  .lobby {
+    display: block;
+  }
+  .lobby-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  .lobby-title h3 {
+    margin: 0;
+  }
+  .player-card {
+    gap: 5px;
+  }
+  .helmet {
+    width: 24px;
+    height: 24px;
+  }
+  .player-card small {
+    font-size: 6px;
+  }
+  .track-footer {
+    font-size: 7px;
+  }
+  .edition {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .host-content {
+    grid-template-columns: 1fr;
+  }
+  .host-content aside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  .join-title h1 {
+    font-size: 38px;
+  }
+  .join-url,
+  .wifi-note,
+  .join-rule {
+    grid-column: 1/-1;
+    margin: 0;
+  }
+  .player-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .track-footer {
+    font-size: 6px;
+  }
+  .host footer {
+    gap: 15px;
+    font-size: 8px;
+  }
+  .track-heading h2 {
+    font-size: 23px;
+  }
+  .host .brand {
+    font-size: 29px;
+  }
+  .host-tools {
+    gap: 3px;
+  }
+  .connection {
+    font-size: 8px;
+    padding: 6px;
+  }
+  .track-heading .tag {
+    font-size: 8px;
+  }
+  .results h1 {
+    font-size: 34px;
+    margin: 8px;
+  }
+  .result-list > div {
+    padding: 4px;
+    font-size: 11px;
+  }
+  .results p {
+    margin: 8px;
+  }
+  .countdown strong {
+    font-size: 100px;
+  }
+}
+@media (orientation: portrait) {
+  .phone.playing {
+    padding: max(10px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+  }
+  .controller-cockpit-bar {
+    padding: 6px 10px;
+  }
+  .cockpit-telemetry {
+    gap: 8px;
+  }
+  .telemetry-box {
+    padding: 2px 6px;
+  }
+  .pilot-meta strong {
+    font-size: 14px;
+  }
+  .controls-gamepad {
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 6px;
+  }
+  .steering-zone {
+    flex: 0.9;
+    max-height: 25vh;
+  }
+  .center-action-zone {
+    width: 100%;
+    height: 60px;
+    flex-shrink: 0;
+  }
+  .empty-item-slot {
+    flex-direction: row;
+    height: 100%;
+    padding: 4px 12px;
+    gap: 8px;
+  }
+  .pedals-zone {
+    flex: 1.3;
+    max-height: 38vh;
+  }
+  .sub-pedals-row {
+    flex: 0.8;
+  }
+  .control b {
+    font-size: clamp(24px, 7vw, 44px);
+  }
+  .control small {
+    font-size: 9px;
+  }
+  .ready-overlay {
+    inset: 90px 10px 20px;
+  }
+  .ready-overlay h2 {
+    font-size: 24px;
+  }
+  .ready-overlay p {
+    font-size: 12px;
+  }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .phone.playing {
+    padding: 6px 12px;
+  }
+  .controller-cockpit-bar {
+    padding: 4px 10px;
+  }
+  .pilot-meta strong {
+    font-size: 14px;
+  }
+  .controller-rpm-strip {
+    margin-top: 4px;
+    padding: 2px 8px;
+  }
+  .controller-message {
+    padding: 4px 8px;
+    margin: 3px 0;
+    font-size: 9px;
+  }
+  .controls-gamepad {
+    gap: 10px;
+    padding: 2px 0;
+  }
+  .center-action-zone {
+    width: 110px;
+  }
+  .control {
+    padding: 4px;
+    border-radius: 14px;
+  }
+  .control b {
+    font-size: clamp(20px, 5vw, 36px);
+  }
+  .control small {
+    font-size: 8px;
+  }
+  .ready-overlay {
+    inset: 50px 10px 10px;
+    gap: 6px;
+    padding: 10px;
+  }
+  .your-bike-card {
+    padding: 4px 14px;
+  }
+  .your-bike-icon {
+    font-size: 24px;
+  }
+  .ready-overlay h2 {
+    font-size: 20px;
+  }
+  .ready-overlay p {
+    font-size: 11px;
+  }
+  .ready-overlay button.primary {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+/* The TV view must fit the display without scrolling, including 16:9 TVs. */
+@media (min-width: 900px) and (min-height: 650px) {
+  .host {
+    height: 100dvh;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .host > header,
+  .host > .lobby,
+  .host > footer {
+    flex-shrink: 0;
+  }
+  .host-content {
+    flex: 1;
+    min-height: 0;
+  }
+  .game-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .track-heading,
+  .track-footer {
+    flex-shrink: 0;
+  }
+  .canvas-wrap {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+  .join-title h1 {
+    font-size: clamp(34px, 5.3vh, 60px);
+    margin-bottom: 15px;
+  }
+  .qr-box img {
+    max-width: min(23vh, 250px);
+  }
+  .qr-box strong {
+    font-size: 22px;
+  }
+  .lobby {
+    margin-top: 18px;
+    padding-top: 16px;
+  }
+  .host footer {
+    margin-top: 15px;
+  }
+  .wifi-note {
+    font-size: 10px;
+  }
+  .track-footer {
+    margin-top: 8px;
+  }
+  .player-card {
+    min-height: 64px;
+  }
+  .join-rule {
+    padding-top: 9px;
+  }
+}
+/* 3D race presentation: the cameras own the TV while racing. */
+.race-stage,
+.webgl-mount,
+.race-webgl,
+.view-grid {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.race-stage {
+  background: #102329;
+}
+.race-webgl {
+  display: block;
+}
+.view-grid {
+  display: grid;
+  pointer-events: none;
+}
+.viewport-hud {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #081b20;
+}
+.view-heading {
+  position: absolute;
+  top: 12px;
+  left: 13px;
+  right: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  text-shadow: 0 2px 4px #000b;
+}
+.view-heading > strong {
+  padding: 5px 10px;
+  border-left: 4px solid var(--rider);
+  background: #10272ace;
+  color: white;
+  font:
+    800 16px "DM Sans",
+    sans-serif;
+  letter-spacing: 0.5px;
+}
+.view-heading > span {
+  font:
+    800 26px "Barlow Condensed",
+    sans-serif;
+  color: #fff;
+  background: #10272aba;
+  padding: 3px 9px;
+  text-align: right;
+  border-radius: 3px;
+}
+.view-heading small {
+  display: block;
+  font:
+    700 10px "DM Sans",
+    sans-serif;
+  letter-spacing: 1px;
+  color: #c6e2de;
+  margin-top: 3px;
+}
+.view-location {
+  position: absolute;
+  top: 55px;
+  left: 16px;
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #fff5d4;
+  text-shadow: 0 1px 3px #000;
+}
+.view-bottom {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 15px;
+}
+.view-item {
+  position: relative;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 6px 9px 9px;
+  min-width: 110px;
+  background: #10272ad9;
+  color: #e1ff83;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.view-item i {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: #d8fa71;
+}
+.speed {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  color: white;
+  text-shadow: 0 2px 5px #0008;
+}
+.speed strong {
+  font:
+    800 italic 38px "Barlow Condensed",
+    sans-serif;
+}
+.speed small {
+  font-size: 8px;
+  font-weight: 800;
+}
+.view-finished {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: #0c25314a;
+  color: #eaff91;
+  font:
+    800 27px "Barlow Condensed",
+    sans-serif;
+  text-shadow: 0 2px 4px #000;
+}
+.view-finished b {
+  font-size: 65px;
+}
+.speed-streaks {
+  position: absolute;
+  inset: 15% 0;
+  pointer-events: none;
+}
+.speed-streaks i {
+  position: absolute;
+  width: 21%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #d4faff);
+  left: -7%;
+  top: 15%;
+  transform: rotate(19deg);
+}
+.speed-streaks i:nth-child(2) {
+  top: 45%;
+  width: 15%;
+  transform: rotate(0);
+}
+.speed-streaks i:nth-child(3) {
+  top: 83%;
+  transform: rotate(-20deg);
+}
+.speed-streaks i:nth-child(4) {
+  left: auto;
+  right: -7%;
+  top: 15%;
+  transform: rotate(-19deg);
+}
+.speed-streaks i:nth-child(5) {
+  left: auto;
+  right: -7%;
+  top: 45%;
+  transform: rotate(0);
+}
+.speed-streaks i:nth-child(6) {
+  left: auto;
+  right: -7%;
+  top: 83%;
+  transform: rotate(20deg);
+}
+.turbo-on {
+  box-shadow: inset 0 0 45px #5bddfa35;
+}
+.tea-on {
+  box-shadow: inset 0 -20px 40px #da941b30;
+}
+.renderer-error,
+.loading-world {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 40px;
+  background: #122a31;
+  color: #ffe2ad;
+}
+.sound-toggle,
+.demo-stop {
+  font:
+    700 10px "DM Sans",
+    sans-serif !important;
+  border: 1px solid #516b63 !important;
+  padding: 8px 10px !important;
+  border-radius: 4px !important;
+}
+.demo-stop {
+  color: #d8fa71 !important;
+}
+.host.race-active {
+  height: 100dvh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px 14px;
+  max-width: none;
+  background: #0d2027;
+}
+.host.race-active header {
+  height: 42px;
+  flex-shrink: 0;
+}
+.host.race-active .brand {
+  font-size: 30px;
+}
+.host.race-active .host-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  margin-top: 10px;
+}
+.host.race-active .game-panel {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+.host.race-active .canvas-wrap {
+  flex: 1;
+  min-height: 0;
+  aspect-ratio: auto;
+  border: 1px solid #43645d;
+  border-radius: 5px;
+}
+.host.race-active aside,
+.host.race-active .lobby,
+.host.race-active footer,
+.host.race-active .track-heading,
+.host.race-active .track-footer,
+.host.race-active .track-label {
+  display: none;
+}
+.host.race-active .race-clock {
+  top: auto;
+  bottom: 5px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  padding: 3px 8px;
+  font-size: 12px;
+  border: 0;
+  pointer-events: none;
+}
+.host.race-active .race-clock small {
+  display: none;
+}
+.countdown {
+  background: #0b202760;
+}
+.countdown strong {
+  font-size: 150px;
+  text-shadow: 0 4px 20px #0008;
+}
+.countdown span,
+.countdown small {
+  text-shadow: 0 2px 6px #000;
+}
+@media (max-width: 900px) {
+  .view-heading {
+    top: 7px;
+    left: 7px;
+    right: 7px;
+  }
+  .view-heading > strong {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+  .view-heading > span {
+    font-size: 21px;
+  }
+  .view-heading small {
+    font-size: 8px;
+  }
+  .view-location {
+    top: 43px;
+    left: 10px;
+    font-size: 6px;
+  }
+  .view-bottom {
+    bottom: 9px;
+    left: 9px;
+    right: 9px;
+  }
+  .speed strong {
+    font-size: 29px;
+  }
+  .view-item {
+    font-size: 7px;
+    min-width: 80px;
+  }
+  .host.race-active .edition {
+    display: none;
+  }
+}
+@media (orientation: portrait) {
+  .host.race-active .connection {
+    display: none;
+  }
+}
+
+/* =========================================
+   Live 2D Track Radar Minimap
+   ========================================= */
+.track-radar {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  width: 140px;
+  height: 140px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+.radar-svg {
+  width: 100%;
+  height: 85%;
+}
+.radar-tag {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #38bdf8;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* =========================================
+   Pro Sportbike Tachometer & RPM Gauge
+   ========================================= */
+.tachometer-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 90px;
+  margin: 0 8px;
+}
+.tach-rpm {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tach-rpm span {
+  font-size: 8px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+.tach-rpm span b {
+  color: #f8fafc;
+  font-size: 11px;
+}
+.rpm-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.rpm-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #f59e0b 65%, #ef4444 90%);
+  transition: width 0.05s linear;
+}
+
+/* =========================================
+   Power-Up Item Slot & Action Badges
+   ========================================= */
+.view-top-badges {
+  position: absolute;
+  top: 48px;
+  left: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  pointer-events: none;
+}
+.hud-item-slot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.88);
+  border: 1.5px solid #facc15;
+  border-radius: 8px;
+  padding: 4px 8px;
+  box-shadow: 0 0 16px rgba(250, 204, 21, 0.4);
+}
+.hud-item-slot .item-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.hud-item-slot .item-text {
+  display: flex;
+  flex-direction: column;
+}
+.hud-item-slot .item-text b {
+  font-size: 9px;
+  font-weight: 900;
+  color: #fef08a;
+  letter-spacing: 0.5px;
+}
+.hud-item-slot .item-text small {
+  font-size: 7px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.hud-action-pill {
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  animation: pulseBadge 0.6s infinite alternate;
+}
+.hud-action-pill.turbo {
+  background: #0284c7;
+  color: #e0f2fe;
+  box-shadow: 0 0 10px #38bdf8;
+}
+.hud-action-pill.shield {
+  background: #059669;
+  color: #d1fae5;
+  box-shadow: 0 0 10px #34d399;
+}
+.hud-action-pill.draft {
+  background: #7c3aed;
+  color: #ede9fe;
+  box-shadow: 0 0 10px #a78bfa;
+}
+.hud-action-pill.drift {
+  background: #d97706;
+  color: #fef3c7;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+@keyframes pulseBadge {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   Mobile Controller Power-Up Item Button
+   ========================================= */
+.item-action-area {
+  display: flex;
+  flex: 0.85;
+}
+.control.item {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border-color: #fef08a;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  animation: pulseBadge 0.8s infinite alternate;
+}
+.control.item b {
+  font-size: 26px;
+}
+.control.item small {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}

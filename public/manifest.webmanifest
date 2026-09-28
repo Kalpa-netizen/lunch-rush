@@ -1,0 +1,16 @@
+{
+  "name": "LUNCH RUSH",
+  "short_name": "Lunch Rush",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#152320",
+  "theme_color": "#152320",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
