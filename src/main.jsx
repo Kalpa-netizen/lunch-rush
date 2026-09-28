@@ -15,6 +15,7 @@ import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/700.css";
 import "./style.css";
 import "./polish.css";
+import "./studio.css";
 const socket = io({ autoConnect: false });
 const emit = (event, data = {}) =>
   new Promise((resolve) =>
@@ -83,6 +84,29 @@ function Brand() {
     </div>
   );
 }
+const bikeArt = (bike) => `/art/${(bike || "SPORT").toLowerCase()}.png`;
+const bikeNames = { SPORT: "The Sprinter", RETRO: "The Classic", SCOOTER: "The Local", CAFE: "The After Hours", DIRT: "The Shortcut", FUTURE: "The Tomorrow" };
+
+function CityShowcase({ theme = "night" }) {
+  return (
+    <div className="city-showcase">
+      <div className="showcase-copy">
+        <span className="showcase-kicker"><i /> THE LUNCH BREAK GRAND PRIX</span>
+        <h1>Clock out.<br />Race on.</h1>
+        <p>From the office to the cafeteria.<br />One city. One winner. Lunch on the line.</p>
+        <div className="route-stops"><span>01 <b>Office</b></span><i /><span>02 <b>City</b></span><i /><span>03 <b>Lunch</b></span></div>
+      </div>
+      <img
+        className="city-art"
+        src={theme === "day" ? "/art/city.png" : "/art/city_night.png"}
+        alt="Miniature city race route with an office, canal, bikes and cafeteria"
+        fetchPriority="high"
+      />
+      <div className="showcase-caption"><span>THE CITY SPRINT</span><b>Big rivalry. Small lunch break. ↗</b></div>
+    </div>
+  );
+}
+
 function LeaderboardModal({ leaderboard, onClose }) {
   const [tab, setTab] = useState("daily");
   const dailyList = leaderboard?.daily || [];
@@ -147,13 +171,27 @@ function LeaderboardModal({ leaderboard, onClose }) {
                   <tr key={entry.key || i} className={`top-${i + 1}`}>
                     <td>
                       <span className={`rank-badge rank-${i + 1}`}>
-                        {i === 0
-                          ? "🥇"
-                          : i === 1
-                            ? "🥈"
-                            : i === 2
-                              ? "🥉"
-                              : `#${i + 1}`}
+                        {i === 0 ? (
+                          <img
+                            src="/art/ui/trophy_gold.png"
+                            alt="1st"
+                            className="leaderboard-trophy-mini"
+                          />
+                        ) : i === 1 ? (
+                          <img
+                            src="/art/ui/trophy_silver.png"
+                            alt="2nd"
+                            className="leaderboard-trophy-mini"
+                          />
+                        ) : i === 2 ? (
+                          <img
+                            src="/art/ui/trophy_bronze.png"
+                            alt="3rd"
+                            className="leaderboard-trophy-mini"
+                          />
+                        ) : (
+                          `#${i + 1}`
+                        )}
                       </span>
                     </td>
                     <td>
@@ -175,7 +213,12 @@ function LeaderboardModal({ leaderboard, onClose }) {
                     </td>
                     <td>
                       <span className={`points-pill ${i === 0 ? "gold" : ""}`}>
-                        ⭐ {entry.points} PTS
+                        <img
+                          src="/art/ui/badge_star.png"
+                          alt="★"
+                          className="points-star-3d"
+                        />{" "}
+                        {entry.points} PTS
                       </span>
                     </td>
                     <td>
@@ -386,7 +429,7 @@ function Host({ state, connected, error, setError }) {
         <div className="game-panel">
           <div className="track-heading">
             <div>
-              <span className="eyebrow">TRACK 01</span>
+              <span className="eyebrow">THE DAILY ESCAPE / TRACK 01</span>
               <h2>
                 Office → Cafeteria <span>↗</span>
               </h2>
@@ -396,18 +439,13 @@ function Host({ state, connected, error, setError }) {
             </span>
           </div>
           <div className="canvas-wrap">
-            <React.Suspense
+            {state?.phase === "lobby" || !state ? <CityShowcase theme={theme} /> : <React.Suspense
               fallback={
                 <div className="loading-world">Loading the city route…</div>
               }
             >
               <Track state={state} theme={theme} />
-            </React.Suspense>
-            {!racing && !results && (
-              <div className="track-label">
-                OFFICE TO CAFETERIA. <strong>BE FIRST TO LUNCH.</strong>
-              </div>
-            )}
+            </React.Suspense>}
             {state?.phase === "countdown" && (
               <div className="countdown">
                 <span>RACE STARTING</span>
@@ -437,11 +475,33 @@ function Host({ state, connected, error, setError }) {
                           state?.lastRacePoints?.[p.id]?.points ||
                           p.pointsEarned;
                         return (
-                          <div key={p.id}>
-                            <b>
-                              {p.finished
-                                ? ["🥇", "🥈", "🥉"][i] || `${i + 1}.`
-                                : "—"}
+                          <div key={p.id} className={`result-row rank-tier-${i + 1}`}>
+                            <b className="result-rank-col">
+                              {p.finished ? (
+                                i === 0 ? (
+                                  <img
+                                    src="/art/ui/trophy_gold.png"
+                                    alt="1st"
+                                    className="podium-trophy-badge gold"
+                                  />
+                                ) : i === 1 ? (
+                                  <img
+                                    src="/art/ui/trophy_silver.png"
+                                    alt="2nd"
+                                    className="podium-trophy-badge silver"
+                                  />
+                                ) : i === 2 ? (
+                                  <img
+                                    src="/art/ui/trophy_bronze.png"
+                                    alt="3rd"
+                                    className="podium-trophy-badge bronze"
+                                  />
+                                ) : (
+                                  `${i + 1}.`
+                                )
+                              ) : (
+                                "—"
+                              )}
                             </b>
                             <strong style={{ color: p.color }}>{p.name}</strong>
                             <span>
@@ -504,11 +564,11 @@ function Host({ state, connected, error, setError }) {
         </div>
         <aside>
           <div className="join-title">
-            <span className="eyebrow">YOUR PHONE. YOUR CONTROLLER.</span>
+            <span className="eyebrow">YOUR NEXT GREAT LUNCH BREAK</span>
             <h1>
-              A little race.
+              Join the
               <br />
-              <em>A better break.</em>
+              <em>starting grid.</em>
             </h1>
           </div>
           <div className="qr-box">
@@ -532,8 +592,9 @@ function Host({ state, connected, error, setError }) {
           </p>
           <div className="join-rule">
             <span>1–{state?.settings.maxPlayers || 6} PLAYERS</span>
-            <span>~90 SEC / RACE</span>
+            <span>{state?.settings.duration || 100} SEC / RACE</span>
           </div>
+          <div className="lobby-perk"><span className="perk-icon">↗</span><div><strong>First to lunch gets a treat.</strong><p>Tea, coffee, snacks… the finish line decides.</p></div></div>
         </aside>
       </section>
       <section className="lobby">
@@ -561,7 +622,7 @@ function Host({ state, connected, error, setError }) {
               >
                 {p ? (
                   <>
-                    <div className="helmet">{racing ? p.position : "↗"}</div>
+                    <div className="helmet">{racing ? p.position : <img src={bikeArt(p.bike)} alt="" />}</div>
                     <div>
                       <strong>{p.name}</strong>
                       <small>
@@ -584,7 +645,7 @@ function Host({ state, connected, error, setError }) {
                 ) : (
                   <>
                     <span className="empty-plus">+</span>
-                    <small>YOUR NAME HERE</small>
+                    <small>OPEN GRID SLOT <b>0{i + 1}</b></small>
                   </>
                 )}
               </div>
@@ -895,6 +956,13 @@ function Phone({ code, state, connected, error, setError }) {
     const result = await emit("player:solo");
     setError(result.error || "");
   };
+  const controlArt = {
+    accelerate: "/art/ui/ctrl_gas.png",
+    brake: "/art/ui/ctrl_brake.png",
+    boost: "/art/ui/ctrl_boost.png",
+    left: "/art/ui/ctrl_steer.png",
+    right: "/art/ui/ctrl_steer.png",
+  };
   const control = (kind, label, sub, extraClass = "", icon = null) => (
     <button
       className={`control ${kind} ${extraClass} ${pressed[kind] ? "pressed" : ""}`}
@@ -913,6 +981,13 @@ function Phone({ code, state, connected, error, setError }) {
       onPointerCancel={(e) => release(e.pointerId)}
       onLostPointerCapture={(e) => release(e.pointerId)}
     >
+      {controlArt[kind] && (
+        <img
+          src={controlArt[kind]}
+          alt=""
+          className={`control-3d-bg ${kind === "left" ? "flipped-x" : ""}`}
+        />
+      )}
       <div className="control-inner">
         {icon && <span className="control-icon">{icon}</span>}
         <b>{label}</b>
@@ -970,12 +1045,17 @@ function Phone({ code, state, connected, error, setError }) {
             <span className="tag">ROOM {code}</span>
           </header>
           <section className="join-form">
-            <span className="eyebrow">YOUR LUNCH BREAK STARTS HERE</span>
+            <span className="eyebrow">WELCOME TO THE GARAGE</span>
             <h1>
-              Grab a bike.
+              Your ride.
               <br />
-              <em>Make a name.</em>
+              <em>Your rules.</em>
             </h1>
+            <div className="garage-preview">
+              <span className="garage-number">0{BIKES.indexOf(bike) + 1}</span>
+              <img src={bikeArt(bike)} alt={`${bikeNames[bike]} — ${bike.toLowerCase()} bike preview`} />
+              <div><span className="eyebrow">{bike}</span><strong>{bikeNames[bike]}</strong><span className="garage-color" style={{background: color}} aria-label="Selected racing color" /></div>
+            </div>
             <form onSubmit={join}>
               <label>
                 Your nickname
@@ -995,11 +1075,10 @@ function Phone({ code, state, connected, error, setError }) {
                     type="button"
                     key={b}
                     className={bike === b ? "selected" : ""}
+                    aria-pressed={bike === b}
                     onClick={() => setBike(b)}
                   >
-                    <span>
-                      {b === "SCOOTER" ? "◉─◉" : b === "FUTURE" ? "◈━◈" : "◉╱◉"}
-                    </span>
+                    <img src={bikeArt(b)} alt="" loading="lazy" />
                     {b}
                   </button>
                 ))}
@@ -1028,7 +1107,7 @@ function Phone({ code, state, connected, error, setError }) {
               </button>
             </form>
             <p>
-              Same performance. Different personality.
+              Preview shows the bike design. Your race uses your chosen color.
               <br />
               No account. No download. No excuses.
             </p>
@@ -1155,7 +1234,7 @@ function Phone({ code, state, connected, error, setError }) {
           {!racing && (state?.phase !== "countdown" || !me?.ready) && (
             <div className="ready-overlay">
               <div className="your-bike-card">
-                <div className="your-bike-icon">🏍️</div>
+                <img className="ready-bike-art" src={bikeArt(me?.bike)} alt={`${me?.bike || "Sport"} bike`} />
                 <div className="your-bike-name">{me?.name}</div>
                 <div className="your-bike-specs">
                   {me?.bike} • ⭐ {dailyPoints} DAILY PTS
@@ -1204,7 +1283,7 @@ function Phone({ code, state, connected, error, setError }) {
                   disabled={!connected || !me}
                   onClick={ready}
                 >
-                  {me?.ready ? "✓ READY • TAP TO UNREADY" : "🚀 I’M READY →"}
+                  {me?.ready ? "✓ READY • TAP TO UNREADY" : "I’M READY →"}
                 </button>
               )}
               {state?.phase === "lobby" &&
@@ -1215,7 +1294,7 @@ function Phone({ code, state, connected, error, setError }) {
                     disabled={!connected || !me}
                     onClick={raceComputer}
                   >
-                    🤖 RACE SOLO VS AI →
+                    RACE SOLO VS AI →
                   </button>
                 )}
               <button
@@ -1275,26 +1354,26 @@ function Phone({ code, state, connected, error, setError }) {
             {/* Right Thumb: Racing Pedals */}
             <div className="pedals-zone">
               <div className="sub-pedals-row">
-                {control("brake", "▰", "BRAKE / DRIFT", "brake-btn")}
+              {control("brake", "BRAKE", "HOLD TO DRIFT", "brake-btn")}
                 {control(
                   "boost",
-                  "⚡",
+                  "BOOST",
                   `BOOST ${Math.round(me?.boostCharge ?? 100)}%`,
                   "boost-btn",
                 )}
               </div>
-              {control("accelerate", "▲", "ACCELERATE (GAS)", "gas-btn")}
+              {control("accelerate", "GAS ↗", "HOLD TO ACCELERATE", "gas-btn")}
             </div>
           </div>
 
           <div className="controller-footer-bar">
-            <span>⚡ MULTI-TOUCH DUAL THUMB ENGINE</span>
+            <span>HOLD GAS + STEER TO RACE</span>
             <span>
               {me?.drafting
                 ? "🔥 SLIPSTREAMING"
                 : me?.driftCharge > 0.5
                   ? "⚡ DRIFT CHARGED"
-                  : "PRO CONTROLLER"}
+                  : "EYES ON THE BIG SCREEN"}
             </span>
           </div>
 

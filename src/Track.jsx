@@ -395,7 +395,17 @@ export default function Track({ state, theme = "night" }) {
               </div>
               {warning && (
                 <div className="road-warning">
-                  <span>!</span>
+                  <img
+                    src={
+                      warning.label === "POTHOLES"
+                        ? "/art/ui/hud_pothole.png"
+                        : warning.label === "SPEED BREAKER"
+                          ? "/art/ui/hud_breaker.png"
+                          : "/art/ui/hud_cone.png"
+                    }
+                    alt={warning.label}
+                    className="hud-hazard-3d-icon"
+                  />
                   <div>
                     <b>
                       {warning.label} · {warning.meters} m
@@ -411,6 +421,11 @@ export default function Track({ state, theme = "night" }) {
               {/* Pro Sportbike Tachometer Gauge & Speedometer */}
               <div className="view-bottom">
                 <div className="view-item">
+                  <img
+                    src="/art/ui/hud_nitro.png"
+                    alt="Nitro"
+                    className="view-nitro-3d-icon"
+                  />
                   {p.crashed || p.crashTimer > 0
                     ? "CRASHED! WIPEOUT 💥"
                     : p.offTrack
@@ -420,8 +435,8 @@ export default function Track({ state, theme = "night" }) {
                         : p.slippery
                           ? "WET ROAD"
                           : p.boosting
-                            ? "TURBO"
-                            : `BOOST ${Math.round(p.boostCharge ?? 100)}%`}
+                            ? "TURBO ACTIVE"
+                            : `NITRO ${Math.round(p.boostCharge ?? 100)}%`}
                   <i style={{ width: `${p.boostCharge ?? 100}%` }} />
                 </div>
 

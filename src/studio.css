@@ -1,0 +1,216 @@
+/* Blender studio art, shared visual language, and thumb-friendly controls. */
+:root { --lime: #ff815b; --muted: #9caeae; background: #111c20; }
+body { background: #111c20; }
+button { transition: background .16s, border-color .16s, transform .16s; }
+.host { max-width: 1800px; padding: 24px 32px 18px; }
+.host .brand { font-size: 34px; }
+.host .edition { font-size: 9px; letter-spacing: 1.8px; }
+.host header { border-color: #ffffff10; }
+.host-tools button, .host-tools .leaderboard-toggle-btn { font-family: "DM Sans", sans-serif; font-size: 10px !important; font-weight: 700; letter-spacing: .5px; color: #cad5d4 !important; background: #1d2c31 !important; border: 1px solid #ffffff12 !important; box-shadow: none; padding: 8px 12px !important; }
+.host-tools button[aria-label] { font-size: 18px !important; padding: 5px 10px !important; }
+.host .connection { font-size: 9px; color: #9be0c8; border: 0; background: transparent; }
+.host-content { grid-template-columns: minmax(0,1fr) 300px; gap: 22px; margin-top: 24px; }
+.track-heading { margin-bottom: 16px; }
+.track-heading h2 { font-size: 29px; letter-spacing: .1px; }
+.track-heading .eyebrow { font-size: 8px; }
+.track-heading .tag { font-size: 8px; letter-spacing: 1px; background: transparent; border-color: #ffffff20; }
+.canvas-wrap { border-radius: 16px; border: 0; background: #dce5df; box-shadow: none; }
+.city-showcase { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(ellipse at 85% 20%, #f0f0df, transparent 65%), #dce5df; color: #192b2d; }
+.showcase-copy { position: absolute; z-index: 2; left: 5%; top: 9%; width: 39%; }
+.showcase-kicker { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; display: flex; align-items: center; gap: 8px; }
+.showcase-kicker i { width: 6px; height: 6px; background: #ea663f; border-radius: 50%; flex-shrink: 0; }
+.showcase-copy h1 { font-size: clamp(56px,6.8vw,108px); font-weight: 800; line-height: .9; letter-spacing: -2px; text-transform: uppercase; margin: 25px 0 20px; }
+.showcase-copy p { font-size: clamp(10px,1vw,13px); line-height: 1.8; color: #526465; }
+.city-art { position: absolute; width: 76%; height: 93%; object-fit: contain; right: -7%; bottom: -1%; filter: drop-shadow(0 22px 18px #253e3820); }
+.route-stops { display: flex; align-items: center; gap: 8px; margin-top: 30px; width: max-content; max-width: 100%; }
+.route-stops span { font-size: 8px; color: #66807b; }
+.route-stops b { display: block; font-size: 10px; color: #314b46; margin-top: 4px; }
+.route-stops i { width: 20px; height: 1px; background: #96aaa0; }
+.showcase-caption { position: absolute; bottom: 20px; left: 5%; right: 4%; display: flex; justify-content: space-between; gap: 12px; font-size: 8px; letter-spacing: 1.5px; }
+.showcase-caption b { font-weight: 400; letter-spacing: .2px; }
+.host aside { border: 1px solid #ffffff12; background: #1b2a2e; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; }
+.join-title .eyebrow { font-size: 8px; color: #9cadac; letter-spacing: 1.1px; }
+.join-title h1 { font-size: clamp(32px,4.5vh,46px); margin: 14px 0 20px; line-height: 1; }
+.join-title h1 em { color: #ff9571; font-style: normal; }
+.qr-box { padding: 16px 12px; border-radius: 12px; background: #f4f2e8; box-shadow: none; }
+.qr-box img { max-width: min(19vh,174px); }
+.qr-box span { color: #64716e; font-size: 8px; letter-spacing: 2px; }
+.qr-box strong { color: #1a302e; font-size: 27px; letter-spacing: 2px; }
+.join-url { font-size: 10px; text-align: center; word-break: break-all; padding: 12px 0 0; color: #bcc8c6; }
+.wifi-note { font-size: 10px; line-height: 1.8; margin-top: 12px; }
+.join-rule { font-size: 9px; color: #f1b094; padding-top: 14px; margin-top: 16px; }
+.lobby-perk { display: flex; gap: 10px; align-items: center; margin-top: auto; padding-top: 18px; }
+.perk-icon { font-size: 23px; color: #ff9672; border: 1px solid #ff967242; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
+.lobby-perk strong { font-size: 10px; color: #eee9dc; }
+.lobby-perk p { font-size: 9px; color: #93a7a7; margin-top: 4px; line-height: 1.6; }
+.lobby { gap: 25px; margin-top: 22px; padding-top: 18px; }
+.lobby-title h3 { font-size: 25px; }
+.player-card { min-height: 67px; background: #18272b; border-color: #ffffff18; padding: 10px; gap: 9px; }
+.player-card.filled { background: #233439; border: 1px solid #ffffff17; border-bottom: 2px solid var(--rider); }
+.player-card .helmet { width: 50px; height: 40px; background: #d5e0d4; overflow: hidden; flex-shrink: 0; }
+.helmet img { width: 100%; height: 100%; object-fit: contain; }
+.player-card strong { font-size: 11px; }
+.player-card small { font-size: 7px; letter-spacing: .8px; color: #9cacac; }
+.player-card small b { display: block; color: #536e6f; font-size: 17px; margin-top: 4px; }
+.empty-plus { font-weight: 400; color: #7c9391; font-size: 22px; }
+.host footer { font-size: 8px; color: #79908f; }
+.primary { background: #ff815b; color: #172529; border-color: #ff815b; border-radius: 10px; box-shadow: 0 3px 0 #a74b30; }
+/* The phone garage uses the same 3D bikes as the room's starting grid. */
+.phone:not(.playing) { max-width: 560px; padding: max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom)); }
+.phone:not(.playing) header { margin-bottom: 30px; }
+.phone header .brand { font-size: 28px; }
+.phone header .tag { color: #a3b8b4; border-color: #ffffff1a; font-size: 9px; }
+.join-form { position: relative; }
+.join-form > .eyebrow { color: #ff9a77; letter-spacing: 1.5px; }
+.join-form h1 { font-size: 54px; line-height: .94; letter-spacing: -.5px; margin: 12px 0 20px; text-transform: none; }
+.join-form h1 br { display: none; }
+.join-form h1 em { display: block; color: #eae9dc; }
+.garage-preview { background: radial-gradient(ellipse at 70% 10%,#f0f0dd,#cedbd1); border-radius: 16px; height: 190px; position: relative; overflow: hidden; margin-bottom: 24px; color: #203936; }
+.garage-number { position: absolute; left: 18px; top: 0; font-family: 'Barlow Condensed',sans-serif; font-size: 112px; font-weight: 800; color: #b6c9bd99; line-height: 1.2; }
+.garage-preview > img { position: absolute; width: 86%; height: 175px; object-fit: contain; right: -7px; top: -5px; filter: drop-shadow(0 8px 5px #23413628); }
+.garage-preview > div { position: absolute; bottom: 14px; left: 18px; right: 18px; display: flex; flex-direction: column; gap: 4px; }
+.garage-preview .eyebrow { font-size: 7px; color: #5d7971; }
+.garage-preview strong { font-size: 15px; letter-spacing: -.4px; }
+.garage-color { position: absolute; right: 0; bottom: 0; width: 17px; height: 17px; border-radius: 50%; border: 2px solid #fff; }
+.join-form label { color: #b6c8c3; font-size: 11px; margin-bottom: 10px; }
+.join-form input { background: #1c2e31; border-color: #ffffff20; font-size: 17px; border-radius: 10px; margin: 8px 0 20px; min-height: 52px; color: #f3f1e7; }
+.bike-grid { gap: 8px; margin-bottom: 20px; }
+.bike-grid button { display: flex; flex-direction: column; align-items: center; height: 91px; font-size: 9px; color: #a9bdb8; border: 1px solid #ffffff18; padding: 3px 3px 10px; background: #1b2c30; border-radius: 10px; }
+.bike-grid button img { height: 62px; width: 100%; object-fit: contain; }
+.bike-grid button.selected { padding: 2px 2px 9px; background: #2b3d3e; border: 2px solid #ff9672; color: #ffe8d9; }
+.colors { gap: 10px; }
+.colors button { width: 44px; height: 44px; flex-shrink: 0; border: 5px solid #111c20; box-shadow: 0 0 0 1px #ffffff25; font-size: 16px; }
+.colors button.selected { outline: 2px solid #f2edde; outline-offset: 1px; }
+.phone .join-button { min-height: 54px; font-size: 14px; font-weight: 700; }
+.join-form > p { font-size: 9px; line-height: 1.7; color: #9caeab; margin-top: 16px; }
+/* Race controls remain native buttons with pointer capture for multi-touch. */
+.phone.playing { background: #101e23; position: relative; }
+.phone .controller-cockpit-bar { background: #1d2d32; box-shadow: none; border: 1px solid #ffffff12; border-radius: 12px; }
+.phone .cockpit-pts-box { background: #ffffff06; border: 0; }
+.phone .cockpit-pts-box .telemetry-label { color: #b7c7c0; }
+.phone .controller-message { background: #1c2c31; border: 1px solid #ffffff10; color: #cad7d4; border-radius: 8px; box-shadow: none; }
+.phone .control { border: 1px solid #52666c; border-radius: 16px; box-shadow: 0 4px 0 #071216; background: #24383e; min-height: 56px; }
+.phone .control b { text-shadow: none; font-size: clamp(28px,5vw,55px); }
+.phone .control small { font-size: 9px; letter-spacing: 1px; }
+.phone .control.steer-btn b { color: #d5e7e0; }
+.phone .control.gas-btn { background: #dbf199; border-color: #efffc7; box-shadow: 0 4px 0 #6e824a; }
+.phone .control.gas-btn b, .phone .control.gas-btn small { color: #283a29; }
+.phone .control.brake-btn { background: #48322e; border-color: #a9705a; }
+.phone .control.brake-btn b { color: #ffbea0; font-size: clamp(23px,3.6vw,38px); }
+.phone .control.boost-btn { background: #244447; border-color: #608e88; }
+.phone .control.boost-btn b { color: #abded3; font-size: clamp(23px,3.6vw,38px); }
+.phone .control.pressed { transform: translateY(3px); filter: brightness(1.18); box-shadow: 0 1px 0 #071216; border-color: #fff; }
+.phone .control.steer-btn.pressed { background: #3a6566; }
+.phone .control.gas-btn.pressed { background: #c0e774; }
+.phone .control.brake-btn.pressed { background: #79503b; }
+.phone .control.boost-btn.pressed { background: #356c65; }
+.phone .boost-meter-fill { background: #b5e5ca; }
+.phone .empty-item-slot { background: #192a30; border-color: #55746b55; }
+.phone .controller-footer-bar { font-size: 8px; color: #8da3a3; letter-spacing: .4px; }
+.phone .ready-overlay { border-radius: 18px; background: #18292efb; border-color: #ffffff20; max-width: 700px; margin-inline: auto; padding: 24px; gap: 14px; overflow-y: auto; touch-action: pan-y; justify-content: safe center; }
+.phone .your-bike-card { background: transparent; border: 0; padding: 0; width: 100%; }
+.ready-bike-art { width: 220px; height: 145px; object-fit: contain; background: #dce5da; border-radius: 14px; margin-bottom: 12px; }
+.phone .your-bike-name { color: #f4f1e4; letter-spacing: 1px; font-size: 14px; }
+.phone .your-bike-specs { color: #a0b4b1; font-size: 9px; }
+.phone .ready-overlay h2 { font-size: 38px; text-shadow: none; color: #f3f0e1; letter-spacing: -.3px; }
+.phone .ready-overlay p { color: #a9bcb7; font-size: 12px; line-height: 1.6; }
+.phone .ready-overlay button.primary { background: #ff906a; color: #172a2c; box-shadow: none; min-height: 52px; width: min(100%,350px); border: 0; }
+.phone .ready-overlay button.solo-button { background: #294248; color: #ddede5; border: 1px solid #5b7978; }
+.phone .ready-overlay .leaderboard-toggle-btn { background: transparent !important; border: 0 !important; color: #b7c9c1 !important; font-size: 10px !important; box-shadow: none; min-height: 40px; }
+.phone .ready-overlay .ready-btn-active { background: #c7e793 !important; }
+.results { background: #152c2cf7; }
+.winner-treat { background: #2c3c32; border-color: #d4cb8a55; }
+@media (max-width:1200px) {
+  .host { padding: 18px 22px; }
+  .host .edition { display: none; }
+  .host-content { grid-template-columns: minmax(0,1fr) 260px; gap: 18px; }
+  .host aside { padding: 20px; }
+  .showcase-copy { width: 49%; }
+  .showcase-copy h1 { font-size: clamp(50px,6.5vw,78px); }
+  .showcase-copy p { max-width: 190px; }
+  .city-art { width: 81%; right: -16%; bottom: -9%; height: 85%; }
+  .showcase-caption b { display: none; }
+  .route-stops { margin-top: 20px; }
+  .lobby { display: block; }
+  .lobby-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .lobby-title h3 { font-size: 20px; }
+  .player-card small { font-size: 6px; }
+}
+@media (max-height:800px) and (min-width:900px) {
+  .host { padding-top: 14px; }
+  .host-content { margin-top: 16px; }
+  .host aside { padding: 16px; }
+  .join-title h1 { font-size: 32px; margin: 10px 0 12px; }
+  .qr-box { padding: 10px; }
+  .qr-box img { max-width: 125px; }
+  .qr-box strong { font-size: 22px; }
+  .join-rule { padding-top: 10px; margin-top: 12px; }
+  .lobby-perk { padding-top: 12px; }
+  .lobby-perk p { display: none; }
+  .showcase-copy h1 { font-size: clamp(48px,5.8vw,88px); margin: 16px 0; }
+  .route-stops { margin-top: 18px; }
+}
+@media (max-width:899px) {
+  .host header { flex-wrap: wrap; gap: 16px; }
+  .host-tools { flex-wrap: wrap; }
+  .host-content { display: block; }
+  .canvas-wrap { aspect-ratio: 1.6; }
+  .showcase-copy h1 { font-size: clamp(48px,8vw,80px); }
+  .host aside { margin-top: 20px; }
+  .host:not(.race-active) .player-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .host footer { gap: 14px; line-height: 1.7; }
+}
+@media (max-width:500px) {
+  .host { padding: 16px; }
+  .host-tools .connection { display: none; }
+  .host-tools button { font-size: 8px !important; }
+  .track-heading h2 { font-size: 25px; }
+  .track-heading .tag { font-size: 6px; padding: 8px; }
+  .canvas-wrap { aspect-ratio: .95; }
+  .showcase-copy { width: 80%; top: 7%; }
+  .showcase-copy h1 { font-size: 56px; }
+  .showcase-copy p { font-size: 10px; }
+  .city-art { width: 82%; right: -14%; height: 65%; bottom: -2%; }
+  .route-stops { display: none; }
+  .showcase-caption { font-size: 6px; bottom: 14px; }
+  .phone:not(.playing) { padding-inline: 20px; }
+  .phone:not(.playing) header { margin-bottom: 24px; }
+  .join-form h1 { font-size: 46px; }
+  .garage-preview { height: 180px; }
+  .colors { gap: 5px; }
+  .phone .cockpit-telemetry { gap: 5px; }
+  .phone .cockpit-pts-box { display: none; }
+  .phone .pilot-meta strong { font-size: 12px; }
+  .phone .speed-digits strong { font-size: 28px; }
+  .phone .controller-message { font-size: 9px; min-height: 36px; display: grid; place-items: center; text-align: center; }
+}
+@media (orientation:portrait) {
+  .phone .controls-gamepad { gap: 12px; }
+  .phone .steering-zone { min-height: 90px; max-height: 24dvh; }
+  .phone .center-action-zone { height: 52px; }
+  .phone .pedals-zone { min-height: 150px; }
+  .phone .ready-overlay { inset: 86px 12px 16px; }
+}
+@media (max-height:500px) and (orientation:landscape) {
+  .phone:not(.playing) { max-width: 850px; }
+  .phone:not(.playing) header { margin-bottom: 18px; }
+  .join-form { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 0 28px; }
+  .join-form > .eyebrow, .join-form h1, .garage-preview, .join-form > p { grid-column: 1; }
+  .join-form h1 { font-size: 40px; }
+  .join-form form { grid-column: 2; grid-row: 1 / span 5; }
+  .garage-preview { height: 185px; }
+  .phone .ready-overlay { inset: 62px 16px 12px; display: grid; grid-template-columns: 210px minmax(0,1fr); gap: 8px 20px; align-content: center; padding: 16px; }
+  .phone .your-bike-card { display: flex; grid-column: 1; grid-row: 1 / span 6; }
+  .ready-bike-art { width: 180px; height: 120px; margin-bottom: 4px; }
+  .phone .ready-overlay > :not(.your-bike-card) { grid-column: 2; }
+  .phone .ready-overlay h2 { font-size: 27px; }
+  .phone .ready-overlay p { font-size: 10px; }
+  .phone .ready-overlay button.primary { min-height: 44px; padding: 8px; font-size: 12px; }
+  .phone .ready-overlay .leaderboard-toggle-btn { min-height: 32px; margin: 0 auto !important; }
+  .phone .ready-overlay:has(.winner-treat) { display: flex; }
+  .phone .controller-message { padding: 4px 8px; font-size: 9px; }
+  .phone .control b { font-size: 38px; }
+  .phone .control.boost-btn b, .phone .control.brake-btn b { font-size: 25px; }
+  .phone .control small { font-size: 8px; }
+}
+@media (prefers-reduced-motion:reduce) { button { transition: none; } }

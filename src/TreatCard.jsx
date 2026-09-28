@@ -8,17 +8,21 @@ export default function TreatCard({ award, compact = false }) {
       aria-label="Winner's surprise trophy"
     >
       <div className="treat-symbol" aria-hidden="true">
-        {award.treat.icon}
-        <span>🏆</span>
+        <img
+          src="/art/ui/trophy_gold.png"
+          alt="3D Golden Bento Trophy"
+          className="trophy-3d-img"
+        />
+        <span className="treat-mini-emoji">{award.treat.icon}</span>
       </div>
       <div className="treat-copy">
-        <span className="eyebrow">SURPRISE TROPHY UNLOCKED</span>
+        <span className="eyebrow">✨ 3D GOLDEN BENTO TROPHY UNLOCKED</span>
         <h2>
           {award.winnerName} wins {award.treat.name}!
         </h2>
         <p>
           {award.virtual
-            ? "A virtual treat for the solo champion."
+            ? "A virtual victory treat for the solo champion."
             : from
               ? `Courtesy of ${from}. Time to treat the winner!`
               : "A little victory, a delicious reward."}

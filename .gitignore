@@ -3,3 +3,5 @@ dist/
 work/
 .env
 .DS_Store
+*.blend1
+
