@@ -3,5 +3,6 @@ dist/
 work/
 .env
 .DS_Store
-*.blend1
-
+*.wgt
+dist-tizen/
+usb-pen-drive/

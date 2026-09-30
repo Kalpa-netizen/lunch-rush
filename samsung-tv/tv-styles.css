@@ -1,0 +1,155 @@
+/* Samsung TV UI Enhancements & Remote Control Legend */
+
+:focus {
+  outline: 3px solid #d8fa71 !important;
+  outline-offset: 4px !important;
+  box-shadow: 0 0 15px rgba(216, 250, 113, 0.6) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+  transform: scale(1.04) !important;
+  z-index: 100 !important;
+}
+
+.tv-remote-bar {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  background: rgba(15, 23, 22, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  z-index: 9999;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: #e2e8f0;
+  pointer-events: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.tv-key-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tv-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.tv-color-dot.red { background-color: #ef4444; box-shadow: 0 0 6px #ef4444; }
+.tv-color-dot.green { background-color: #22c55e; box-shadow: 0 0 6px #22c55e; }
+.tv-color-dot.yellow { background-color: #eab308; box-shadow: 0 0 6px #eab308; }
+.tv-color-dot.blue { background-color: #3b82f6; box-shadow: 0 0 6px #3b82f6; }
+
+.tv-key-badge {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+/* TV Server Setup Modal */
+#lr-tv-server-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 16, 15, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.tv-modal-card {
+  background: #152320;
+  border: 1px solid rgba(216, 250, 113, 0.3);
+  border-radius: 20px;
+  padding: 36px 44px;
+  max-width: 600px;
+  width: 90%;
+  color: #fff;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+.tv-modal-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #d8fa71;
+  margin-bottom: 8px;
+}
+
+.tv-modal-desc {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.tv-input-group {
+  margin-bottom: 24px;
+}
+
+.tv-input-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+}
+
+.tv-text-input {
+  width: 100%;
+  background: #0d1715;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  color: #fff;
+  font-size: 18px;
+  font-family: monospace;
+  box-sizing: border-box;
+}
+
+.tv-text-input:focus {
+  border-color: #d8fa71;
+}
+
+.tv-btn-row {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.tv-btn {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s;
+}
+
+.tv-btn-primary {
+  background: #d8fa71;
+  color: #152320;
+}
+
+.tv-btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}

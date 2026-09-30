@@ -1,3 +1,4 @@
+import { routeNotice } from "../shared/traffic.js";
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { io } from "socket.io-client";
@@ -16,7 +17,21 @@ import "@fontsource/dm-sans/700.css";
 import "./style.css";
 import "./polish.css";
 import "./studio.css";
-const socket = io({ autoConnect: false });
+export const getServerUrl = () => {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const serverParam = params.get("server");
+    if (serverParam) return serverParam;
+    const stored = localStorage.getItem("lr-server-url");
+    if (stored) return stored;
+    if (typeof window !== "undefined" && window.location.protocol.startsWith("http")) {
+      return window.location.origin;
+    }
+  } catch {}
+  return "";
+};
+const serverOrigin = getServerUrl();
+const socket = serverOrigin ? io(serverOrigin, { autoConnect: false }) : io({ autoConnect: false });
 const emit = (event, data = {}) =>
   new Promise((resolve) =>
     socket
@@ -298,18 +313,20 @@ function Host({ state, connected, error, setError }) {
   }
 
   useEffect(() => {
-    fetch("/api/network")
+    const serverBase = getServerUrl();
+    const fetchUrl = serverBase ? `${serverBase}/api/network` : "/api/network";
+    fetch(fetchUrl)
       .then((r) => r.json())
       .then((data) => {
-        setAddresses(data.addresses);
+        setAddresses(data.addresses || []);
         setBase(
           data.publicUrl ||
-            (!["localhost", "127.0.0.1"].includes(location.hostname)
+            (!["localhost", "127.0.0.1"].includes(location.hostname) && location.protocol.startsWith("http")
               ? location.origin
-              : data.addresses[0] || location.origin),
+              : data.addresses?.[0] || (serverBase || location.origin)),
         );
       })
-      .catch(() => setBase(location.origin));
+      .catch(() => setBase(serverBase || location.origin));
   }, []);
   useEffect(() => {
     if (!connected) {
@@ -401,7 +418,10 @@ function Host({ state, connected, error, setError }) {
           <button
             className="sound-toggle"
             aria-pressed={sound}
+            title="Engine sounds, police siren and spoken route guidance"
             data-audio-state={engine.current?.state || "off"}
+            data-guidance-state={engine.current?.guidanceState || "off"}
+            data-last-guidance={engine.current?.lastGuidance || ""}
             onClick={toggleSound}
           >
             {sound ? "SOUND ON · MUTE" : "ENABLE SOUND"}
@@ -789,7 +809,8 @@ function Phone({ code, state, connected, error, setError }) {
     pointers = useRef(new Map());
   const me = state?.players.find((p) => p.id === id),
     racing = state?.phase === "racing" && me?.racing && !me?.finished;
-  const roadWarning = racing ? hazardAhead(me.distance) : null;
+  const navigation = racing ? routeNotice(me,state.elapsed,state.now) : null;
+  const roadWarning = navigation || (racing ? hazardAhead(me.distance) : null);
   const clear = () => {
     pointers.current.clear();
     input.current = {
@@ -985,7 +1006,7 @@ function Phone({ code, state, connected, error, setError }) {
         <img
           src={controlArt[kind]}
           alt=""
-          className={`control-3d-bg ${kind === "left" ? "flipped-x" : ""}`}
+          className={`control-3d-bg ${kind === "right" ? "flipped-x" : ""}`}
         />
       )}
       <div className="control-inner">
@@ -1214,7 +1235,7 @@ function Phone({ code, state, connected, error, setError }) {
                 ? `⚡ STARTING IN ${Math.ceil(state.remaining)}s • EYES ON THE MAIN DISPLAY!`
                 : racing
                   ? roadWarning
-                    ? `${roadWarning.label} · ${roadWarning.meters} m — ${roadWarning.advice}`
+                    ? `${roadWarning.label}${roadWarning.meters != null ? ` · ${roadWarning.meters} m` : ""} — ${roadWarning.advice}`
                     : me?.shield
                       ? "🛡️ SHIELD ACTIVE • ABSORBS NEXT CRASH"
                       : me?.drafting

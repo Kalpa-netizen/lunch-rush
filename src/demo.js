@@ -1,3 +1,5 @@
+import { ACCIDENT, trafficAt, signalBrake } from "../shared/traffic.js";
+import { ROADWORK_OBSTACLES, POTHOLES } from "../shared/roadFeatures.js";
 import { io } from "socket.io-client";
 import { COLORS, BIKES, OBSTACLES, routeDistance } from "../shared/track.js";
 // Preview drivers send the same control packets as phones; they cannot set positions.
@@ -19,8 +21,16 @@ export function startDemo(code, count, onError, onRemove) {
         ),
     );
   (async () => {
+    const serverUrl = (() => {
+      try {
+        const p = new URLSearchParams(window.location.search);
+        return p.get("server") || localStorage.getItem("lr-server-url") || undefined;
+      } catch { return undefined; }
+    })();
     for (let i = 0; i < count && !stopped; i++) {
-      const socket = io({ forceNew: true, reconnection: false });
+      const socket = serverUrl
+        ? io(serverUrl, { forceNew: true, reconnection: false })
+        : io({ forceNew: true, reconnection: false });
       const p = { socket, i, seq: 0 };
       clients.push(p);
       await new Promise((resolve, reject) => {
@@ -78,7 +88,13 @@ export function startDemo(code, count, onError, onRemove) {
           d = routeDistance(rider.distance);
         let lane =
           (p.i - (count - 1) / 2) * 2.6 + Math.sin(t * 0.25 + p.i) * 1.8;
-        for (const o of OBSTACLES) {
+        for (const o of [
+          ...OBSTACLES,
+          ...ROADWORK_OBSTACLES,
+          ...POTHOLES,
+          ACCIDENT,
+          ...trafficAt(t).map((v) => ({ ...v, radius: 2.3 })),
+        ]) {
           if (Math.abs(d - o.distance) < 28) {
             if (o.kind === "boost_pad") {
               if (Math.abs(lane - o.lane) < 5) lane = o.lane;
@@ -93,8 +109,12 @@ export function startDemo(code, count, onError, onRemove) {
           steer: active
             ? Math.max(-1, Math.min(1, (lane - rider.lane) * 0.65))
             : 0,
-          accelerate: active && t > p.i * 0.25,
-          brake: active && t > 10 && (t + p.i * 3) % 24 < 0.28,
+          accelerate:
+            active && t > p.i * 0.25 && !(p.i === 0 && signalBrake(rider, t)),
+          brake:
+            active &&
+            ((p.i === 0 && signalBrake(rider, t)) ||
+              (t > 10 && (t + p.i * 3) % 24 < 0.28)),
           boost: active && (t + p.i * 4) % 20 < 1.3,
         });
       }

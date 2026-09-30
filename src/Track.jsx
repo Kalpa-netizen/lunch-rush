@@ -1,3 +1,4 @@
+import RouteNotice from "./RouteNotice.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { hazardAhead } from "../shared/roadFeatures.js";
@@ -169,7 +170,7 @@ export default function Track({ state, theme = "night" }) {
         rendered.push(p);
       }
       world.renderEntities(s?.hazards, s?.projectiles);
-      world.update(time);
+      world.update(time, s);
       renderer.setScissorTest(false);
       renderer.setViewport(0, 0, el.clientWidth, el.clientHeight);
       renderer.setClearColor(themeRef.current === "day" ? 0x9dd6ed : 0x070b14);
@@ -186,7 +187,7 @@ export default function Track({ state, theme = "night" }) {
               66,
               v.width / v.height,
               0.15,
-              650,
+              6000,
             );
             cameras.set(p.id, {
               camera,
@@ -393,6 +394,7 @@ export default function Track({ state, theme = "night" }) {
                   }}
                 />
               </div>
+              <RouteNotice player={p} state={state} />
               {warning && (
                 <div className="road-warning">
                   <img

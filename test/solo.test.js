@@ -31,6 +31,7 @@ test("solo starts with one human and CPU completes the route through normal phys
   assert.ok(airborne);
   assert.ok(human.finished && bot.finished);
   assert.equal(bot.distance, TRACK.length);
+  assert.equal(bot.signalViolations, 0, "AI must wait for a legal signal");
   assert.equal(bot.checkpoint, 4);
   assert.ok(bot.finishTime > 65 && bot.finishTime < 100);
   assert.deepEqual(room.players.map((p) => p.position).sort(), [1, 2]);

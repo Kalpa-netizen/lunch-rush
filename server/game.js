@@ -1,3 +1,10 @@
+import { ACCIDENT, signalBrake, trafficAt } from "../shared/traffic.js";
+import {
+  resetTrafficPlayer,
+  holdForPolice,
+  checkSignal,
+  hitTraffic,
+} from "./traffic.js";
 import { randomUUID } from "node:crypto";
 import {
   POTHOLES,
@@ -103,6 +110,10 @@ export function createPlayer(name, bike, color) {
     bestLap: null,
     lastLapTime: 0,
     position: 0,
+    policeChaseUntil: 0,
+    policeUntil: 0,
+    signalPassed: false,
+    signalViolations: 0,
   };
 }
 export function startRace(room) {
@@ -118,6 +129,7 @@ export function startRace(room) {
   room.players.forEach((p) => {
     p.racing = racers.includes(p);
   });
+  racers.forEach(resetTrafficPlayer);
   racers.forEach((p, i) =>
     Object.assign(p, {
       distance: 0,
@@ -188,8 +200,15 @@ export function prepareSolo(room) {
 }
 function computerInput(room, p) {
   const elapsed = room.now - room.raceStart;
+  const waitingForSignal = signalBrake(p, elapsed);
   let targetLane = Math.sin(elapsed * 0.3) * 2.5;
-  for (const obstacle of [...OBSTACLES, ...ROADWORK_OBSTACLES, ...POTHOLES]) {
+  for (const obstacle of [
+    ...OBSTACLES,
+    ...ROADWORK_OBSTACLES,
+    ...POTHOLES,
+    ACCIDENT,
+    ...trafficAt(elapsed).map((v) => ({ ...v, radius: 2.3 })),
+  ]) {
     const ahead = obstacle.distance - p.distance;
     if (ahead > 0 && ahead < 42) {
       if (obstacle.kind === "boost_pad") {
@@ -214,19 +233,30 @@ function computerInput(room, p) {
     }
   }
   return {
-    accelerate: elapsed > 0.6,
-    brake: SPEED_BREAKERS.some(
-      (b) =>
-        b.distance - p.distance > 0 &&
-        b.distance - p.distance < 18 &&
-        p.speed > 27,
-    ),
-    steer: Math.max(
-      -1,
-      Math.min(1, (targetLane - p.lane) * 0.65 - p.lateralVelocity * 0.12),
-    ),
-    boost: elapsed > 8 && elapsed % 22 < 0.9 && !p.slippery && !p.airborne,
-    item: Boolean(p.item && (elapsed % 7 < 0.4 || p.distance > 3000)),
+    accelerate: elapsed > 0.6 && !waitingForSignal,
+    brake:
+      waitingForSignal ||
+      SPEED_BREAKERS.some(
+        (b) =>
+          b.distance - p.distance > 0 &&
+          b.distance - p.distance < 18 &&
+          p.speed > 27,
+      ),
+    steer: waitingForSignal
+      ? 0
+      : Math.max(
+          -1,
+          Math.min(1, (targetLane - p.lane) * 0.65 - p.lateralVelocity * 0.12),
+        ),
+    boost:
+      !waitingForSignal &&
+      elapsed > 8 &&
+      elapsed % 22 < 0.9 &&
+      !p.slippery &&
+      !p.airborne,
+    item:
+      !waitingForSignal &&
+      Boolean(p.item && (elapsed % 7 < 0.4 || p.distance > 3000)),
   };
 }
 export function finishRace(room) {
@@ -303,6 +333,8 @@ export function tick(room, dt = STEP) {
         : p.connected && room.now - p.lastInput < 0.5
           ? p.input
           : emptyInput();
+
+    if (holdForPolice(p, room.now)) continue;
 
     // Use Power-up item
     if (input.item && p.item && !p.crashed) {
@@ -482,6 +514,8 @@ export function tick(room, dt = STEP) {
     }
 
     applyRoadHazards(p, previous, room.now);
+    checkSignal(p, previous, room, dt);
+    hitTraffic(p, previous, room.now - room.raceStart, dt, room.now);
 
     // Item Box Collection
     const dMin = Math.min(before, after) - 0.9;
@@ -501,7 +535,7 @@ export function tick(room, dt = STEP) {
     }
 
     // Continuous Collision Detection (CCD) for obstacles & hurdles
-    for (const obstacle of [...OBSTACLES, ...ROADWORK_OBSTACLES]) {
+    for (const obstacle of [...OBSTACLES, ...ROADWORK_OBSTACLES, ACCIDENT]) {
       const isOverlappingDistance =
         (obstacle.distance >= dMin && obstacle.distance <= dMax) ||
         Math.abs(after - obstacle.distance) < (obstacle.radius || 1.5) + 1.2;
@@ -621,7 +655,11 @@ export function tick(room, dt = STEP) {
       proj.distance += proj.speed * dt;
       let hit = false;
       for (const p of racers) {
-        if (p.id !== proj.createdBy && !p.finished) {
+        if (
+          p.id !== proj.createdBy &&
+          !p.finished &&
+          !(p.policeUntil > room.now && room.now >= p.policeChaseUntil)
+        ) {
           if (
             Math.abs(p.distance - proj.distance) < 2.5 &&
             Math.abs(p.lane - proj.lane) < 2.2
@@ -662,6 +700,7 @@ export function tick(room, dt = STEP) {
       }
       for (const p of racers) {
         if (
+          !(p.policeUntil > room.now && room.now >= p.policeChaseUntil) &&
           Math.abs(p.distance - hazard.distance) < 2.2 &&
           Math.abs(p.lane - hazard.lane) < 2.0 &&
           room.now - p.lastCollision > 0.8
@@ -692,6 +731,8 @@ export function tick(room, dt = STEP) {
       if (
         !a.finished &&
         !b.finished &&
+        !(a.policeUntil > room.now && room.now >= a.policeChaseUntil) &&
+        !(b.policeUntil > room.now && room.now >= b.policeChaseUntil) &&
         delta < 3.2 &&
         Math.abs(a.lane - b.lane) < 1.5
       ) {
@@ -735,6 +776,11 @@ export function snapshot(room) {
       room.phase === "racing" || room.phase === "results"
         ? room.now - room.raceStart
         : 0,
+    traffic: trafficAt(
+      room.phase === "racing" || room.phase === "results"
+        ? room.now - room.raceStart
+        : 0,
+    ),
     hazards: room.hazards || [],
     projectiles: room.projectiles || [],
     leaderboard: getLeaderboard(),

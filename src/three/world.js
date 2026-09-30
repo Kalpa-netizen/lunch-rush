@@ -1,4 +1,6 @@
+import { createCityLife, furnishCafeteria } from "./cityLife.js";
 import * as THREE from "three";
+import { createRoadside, surfaceTexture } from "./roadside.js";
 import {
   POTHOLES,
   SPEED_BREAKERS,
@@ -117,12 +119,14 @@ export function createWorld(initialTheme = "night") {
     end = TRACK.length + 80,
   ) {
     const pos = [],
+      uv = [],
       idx = [],
       n = Math.ceil((end - start) / 3);
     for (let i = 0; i <= n; i++)
       for (const lane of [laneA, laneB]) {
         const p = trackPoint(start + (i / n) * (end - start), lane);
         pos.push(p.x, p.y + height, p.z);
+        uv.push(lane / 6, (start + (i / n) * (end - start)) / 6);
       }
     for (let i = 0; i < n; i++) {
       const a = i * 2;
@@ -130,6 +134,7 @@ export function createWorld(initialTheme = "night") {
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
     g.setIndex(idx);
     g.computeVertexNormals();
     const m = mat(color).clone();
@@ -146,14 +151,11 @@ export function createWorld(initialTheme = "night") {
   const edgeRibbonR = ribbon(11.15, 11.4, 0.11, 0xffc43d);
 
   const dashes = [],
-    curbs = [],
     lamps = [],
     lampArms = [],
     lampHeads = [],
     lampCones = [],
     lampRoadPools = [],
-    treeTrunks = [],
-    treeCrowns = [],
     bridgeRails = [],
     bridgePosts = [],
     beaconLights = [];
@@ -165,19 +167,21 @@ export function createWorld(initialTheme = "night") {
   // High-visibility reflective road centerline dashes
   instances(new THREE.BoxGeometry(0.24, 0.03, 5), mat(0xffeb8a), dashes);
 
-  for (let d = -30; d < TRACK.length + 40; d += 5)
-    for (const lane of [-12.7, 12.7]) {
-      const p = trackPoint(d, lane);
-      curbs.push({
-        ...p,
-        y: p.y + 0.24,
-        color: Math.floor(d / 5) % 2 ? 0xffb703 : 0x222a33,
-      });
-    }
-  instances(new THREE.BoxGeometry(1, 0.45, 4.95), mat(0xffffff), curbs);
+  const roadside = createRoadside(scene, instances);
+  roadRibbon.material.map = surfaceTexture("asphalt");
+  roadRibbon.material.bumpMap = roadRibbon.material.map;
+  roadRibbon.material.bumpScale = 0.025;
+  roadRibbon.material.roughness = 0.96;
+  sidewalkRibbon.material.map = surfaceTexture("gravel");
+  ground.material = new THREE.MeshStandardMaterial({
+    map: roadside.grass.clone(),
+    roughness: 1,
+  });
+  ground.material.map.repeat.set(600, 600);
+  ground.material.map.needsUpdate = true;
 
   // DENSE STREETLIGHTS WITH GLOWING LANTERNS, VOLUMETRIC LIGHT CONES & ROAD LIGHT POOLS
-  for (let d = 30; d < TRACK.length; d += 45) {
+  for (let d = 30; d < TRACK.length; d += 90) {
     for (const lane of [-17, 17]) {
       const p = trackPoint(d, lane);
       lamps.push({ ...p, y: p.y + 7 });
@@ -210,20 +214,6 @@ export function createWorld(initialTheme = "night") {
         sx: 11.5,
         sy: 0.02,
         sz: 14.0,
-      });
-    }
-
-    if (d > CULVERT.start - 80 && d < CULVERT.end + 80) continue;
-    for (const lane of [-24, 25]) {
-      const p = trackPoint(d + 20, lane);
-      treeTrunks.push({ ...p, y: 2.7 });
-      treeCrowns.push({
-        ...p,
-        y: 8,
-        sx: 3.8,
-        sy: 5,
-        sz: 3.8,
-        color: Math.floor(d) % 3 ? 0x143826 : 0x1d4732,
       });
     }
   }
@@ -267,13 +257,6 @@ export function createWorld(initialTheme = "night") {
   });
   instances(boxGeo, roadPoolMat, lampRoadPools);
 
-  instances(
-    new THREE.CylinderGeometry(0.45, 0.65, 5.5, 6),
-    mat(0x3d2c1f),
-    treeTrunks,
-  );
-  instances(new THREE.IcosahedronGeometry(1, 1), mat(0xffffff), treeCrowns);
-
   // ILLUMINATED NIGHT SKYLINE & GLOWING OFFICE WINDOWS
   const towers = [],
     windows = [];
@@ -289,7 +272,11 @@ export function createWorld(initialTheme = "night") {
   ];
 
   for (let d = 90, i = 0; d < TRACK.length - 130; d += 95, i++) {
-    if (d > CULVERT.start - 140 && d < CULVERT.end + 120) continue;
+    if (
+      (d / TRACK.length > 0.24 && d / TRACK.length < 0.58) ||
+      (d / TRACK.length > 0.72 && d / TRACK.length < 0.87)
+    )
+      continue;
     for (const side of [-1, 1]) {
       const p = trackPoint(d, side * (49 + (i % 3) * 9)),
         w = 25 + (i % 3) * 8,
@@ -302,7 +289,9 @@ export function createWorld(initialTheme = "night") {
         sy: h,
         sz: depth,
         color:
-          nightBuildingColors[(i + (side === 1 ? 1 : 0)) % nightBuildingColors.length],
+          nightBuildingColors[
+            (i + (side === 1 ? 1 : 0)) % nightBuildingColors.length
+          ],
       });
 
       // Rooftop Aviation Obstruction Red Beacons
@@ -335,14 +324,17 @@ export function createWorld(initialTheme = "night") {
               sx: 3.1,
               sy: 3.6,
               sz: 0.1,
-              color: windowColors[(i * 7 + face * 3 + Math.floor(y)) % windowColors.length],
+              color:
+                windowColors[
+                  (i * 7 + face * 3 + Math.floor(y)) % windowColors.length
+                ],
             });
           }
         }
     }
   }
 
-  instances(boxGeo, mat(0xffffff), towers);
+  const towerMesh = instances(boxGeo, mat(0xffffff), towers);
   const windowInstances = instances(
     boxGeo,
     new THREE.MeshBasicMaterial({ color: 0xffffff }),
@@ -412,28 +404,7 @@ export function createWorld(initialTheme = "night") {
   cafe.position.set(finish.x, 0, finish.z);
   cafe.rotation.y = finish.angle;
   scene.add(cafe);
-  box(65, 0.3, 100, 0xcdbca1, 0, 0, 25, cafe);
-  box(46, 13, 22, 0xefcd8c, 0, 6.5, 47, cafe);
-  box(50, 1.3, 26, 0xdc7043, 0, 13.2, 47, cafe);
-  for (const x of [-15, -5, 5, 15])
-    box(7, 7, 0.3, 0x467b85, x, 6.5, 35.8, cafe);
-  board(cafe, "CAFETERIA", 42, 7, 0, 18, 35.3, "#e47140");
-  box(48, 0.8, 8, 0x2f8c7d, 0, 11, 32, cafe);
-  for (const x of [-23, 23]) {
-    box(0.35, 11, 0.35, 0x245f5c, x, 5.5, 29, cafe);
-  }
-  for (const x of [-21, 21])
-    for (const z of [12, 22]) {
-      const table = mesh(
-        new THREE.CylinderGeometry(2.2, 2.2, 0.3, 12),
-        mat(0xf6d89e),
-        x,
-        2.3,
-        z,
-        cafe,
-      );
-      box(0.3, 2.3, 0.3, 0x637875, x, 1.15, z, cafe);
-    }
+  furnishCafeteria(cafe, { box, mesh, mat, board });
   gateway(TRACK.length, "CAFETERIA · FINISH", "#df713d");
   // A gold lunch-cup trophy marks the destination before the surprise reveal.
   const trophy = new THREE.Group();
@@ -545,7 +516,7 @@ export function createWorld(initialTheme = "night") {
       hole.rotation.y = Math.PI / 2;
     }
   }
-  gateway(CULVERT.start - 48, "CANAL CULVERTS  ↑");
+  gateway(CULVERT.start - 48, "CANAL FLYOVER  ↑");
   gateway(TRACK.length * 0.84, "CAFETERIA  →  600 m", "#d8753f");
   gateway(RAMP.start - 35, "ROADWORKS · JUMP", "#c58c32");
   gateway(CONSTRUCTION.start - 85, "CONSTRUCTION AHEAD", "#aa591e");
@@ -810,7 +781,7 @@ export function createWorld(initialTheme = "night") {
       color: i % 2 ? 0x08101a : 0x0e1724,
     });
   }
-  instances(boxGeo, mat(0xffffff), distant);
+  const distantMesh = instances(boxGeo, mat(0xffffff), distant);
   // Floating Mystery Item Boxes
   const itemBoxes = [];
   const itemBoxGeo = new THREE.BoxGeometry(1.8, 1.8, 1.8);
@@ -872,27 +843,46 @@ export function createWorld(initialTheme = "night") {
     scene.background.setHex(isNight ? 0x070b14 : 0x9dd6ed);
     scene.fog.color.setHex(isNight ? 0x09101c : 0xb9dce9);
     scene.fog.near = isNight ? 140 : 200;
-    scene.fog.far = isNight ? 720 : 800;
+    scene.fog.far = isNight ? 720 : 1100;
+    roadside.setTheme(isNight);
 
     hemiLight.color.setHex(isNight ? 0x364a66 : 0xe6f7ff);
     hemiLight.groundColor.setHex(isNight ? 0x0a111a : 0x8b9c68);
-    hemiLight.intensity = isNight ? 2.1 : 2.25;
+    hemiLight.intensity = isNight ? 2.1 : 1.8;
 
     mainLight.color.setHex(isNight ? 0x7ea5d6 : 0xffecd0);
-    mainLight.intensity = isNight ? 1.85 : 3.0;
+    mainLight.intensity = isNight ? 1.85 : 2.4;
 
     stars.visible = isNight;
-    ground.material.color.setHex(isNight ? 0x0c1411 : 0x98b878);
+    ground.material.color.setHex(isNight ? 0x5d7363 : 0xffffff);
 
-    sidewalkRibbon.material.color.setHex(isNight ? 0x161d23 : 0xbfc5c0);
-    roadRibbon.material.color.setHex(isNight ? 0x0f1318 : 0x34454f);
-    edgeRibbonL.material.color.setHex(isNight ? 0xffc43d : 0xfff2be);
-    edgeRibbonR.material.color.setHex(isNight ? 0xffc43d : 0xfff2be);
+    sidewalkRibbon.material.color.setHex(isNight ? 0x606976 : 0xffffff);
+    roadRibbon.material.color.setHex(isNight ? 0x77808b : 0xc6c8c3);
+    edgeRibbonL.material.color.setHex(isNight ? 0xffc43d : 0xf6d465);
+    edgeRibbonR.material.color.setHex(isNight ? 0xffc43d : 0xf6d465);
 
-    coneMat.opacity = isNight ? 0.13 : 0.0;
-    roadPoolMat.opacity = isNight ? 0.24 : 0.0;
+    coneMat.opacity = 0;
+    roadPoolMat.opacity = 0;
     beaconMesh.visible = isNight;
+    towers.forEach((tower, i) =>
+      towerMesh.setColorAt(
+        i,
+        new THREE.Color(
+          isNight ? tower.color : [0x879c9c, 0x6d8791, 0x96a9a5][i % 3],
+        ),
+      ),
+    );
+    towerMesh.instanceColor.needsUpdate = true;
+    distant.forEach((tower, i) =>
+      distantMesh.setColorAt(
+        i,
+        new THREE.Color(isNight ? tower.color : 0x9bafb0),
+      ),
+    );
+    distantMesh.instanceColor.needsUpdate = true;
   }
+
+  const cityLife = createCityLife(scene, { box, mesh, mat, board });
 
   // Initialize with the chosen theme
   applyTheme(currentTheme);
@@ -950,7 +940,8 @@ export function createWorld(initialTheme = "night") {
         dynamicGroup.add(flame);
       }
     },
-    update(time) {
+    update(time, state) {
+      cityLife.update(state, state?.elapsed || 0);
       rippleMesh.position.x = Math.sin(time * 0.3) * 2;
 
       // Hazard strobe blink

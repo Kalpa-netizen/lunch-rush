@@ -10,7 +10,7 @@
         "podiums": 1,
         "races": 1,
         "bestTime": 58.4,
-        "lastActive": 1790622211899
+        "lastActive": 1790763961367
       },
       "RACER_TWO": {
         "name": "RACER_TWO",
@@ -21,86 +21,75 @@
         "podiums": 1,
         "races": 1,
         "bestTime": 62.1,
-        "lastActive": 1790622211899
+        "lastActive": 1790763961367
       }
     },
-    "2026-09-29": {
-      "PLAYER": {
-        "name": "PLAYER",
-        "bike": "SPORT",
-        "color": "#ff624b",
-        "points": 118,
-        "wins": 0,
-        "podiums": 1,
-        "races": 2,
-        "bestTime": 83.656418525023,
-        "lastActive": 1790622211998
-      },
-      "PHONE 1": {
-        "name": "PHONE 1",
+    "2026-09-30": {
+      "WINNER": {
+        "name": "WINNER",
         "bike": "SPORT",
         "color": "#ff624b",
         "points": 145,
         "wins": 1,
         "podiums": 1,
         "races": 1,
-        "bestTime": 75.14559072284949,
-        "lastActive": 1790622226967
+        "bestTime": 76.66990934627975,
+        "lastActive": 1790763961434
+      },
+      "PHONE 1": {
+        "name": "PHONE 1",
+        "bike": "SPORT",
+        "color": "#ff624b",
+        "points": 50,
+        "wins": 0,
+        "podiums": 0,
+        "races": 1,
+        "bestTime": 98.53580328323467,
+        "lastActive": 1790763979641
       },
       "PHONE 2": {
         "name": "PHONE 2",
         "bike": "SPORT",
         "color": "#45d6b0",
-        "points": 60,
+        "points": 85,
         "wins": 0,
-        "podiums": 0,
+        "podiums": 1,
         "races": 1,
-        "bestTime": 77.6894073634308,
-        "lastActive": 1790622226967
+        "bestTime": 78.4369146098076,
+        "lastActive": 1790763979641
       },
       "PHONE 3": {
         "name": "PHONE 3",
         "bike": "SPORT",
         "color": "#a99bff",
-        "points": 100,
+        "points": 120,
         "wins": 0,
         "podiums": 1,
         "races": 1,
         "bestTime": 76.35123781376835,
-        "lastActive": 1790622226967
+        "lastActive": 1790763979641
       },
       "PHONE 4": {
         "name": "PHONE 4",
         "bike": "SPORT",
         "color": "#ffc64b",
-        "points": 120,
-        "wins": 0,
+        "points": 145,
+        "wins": 1,
         "podiums": 1,
         "races": 1,
-        "bestTime": 75.61129412832588,
-        "lastActive": 1790622226967
+        "bestTime": 75.57129412832587,
+        "lastActive": 1790763979641
       },
       "PHONE 5": {
         "name": "PHONE 5",
         "bike": "SPORT",
         "color": "#64c9ff",
-        "points": 65,
+        "points": 60,
         "wins": 0,
         "podiums": 0,
         "races": 1,
-        "bestTime": 80.35987069893633,
-        "lastActive": 1790622226967
-      },
-      "KALPA": {
-        "name": "Kalpa",
-        "bike": "SPORT",
-        "color": "#ffc64b",
-        "points": 131,
-        "wins": 0,
-        "podiums": 1,
-        "races": 3,
-        "bestTime": 91.74392915303953,
-        "lastActive": 1790624324030
+        "bestTime": 86.92499147188279,
+        "lastActive": 1790763979641
       }
     }
   },
@@ -114,7 +103,7 @@
       "podiums": 1,
       "races": 1,
       "bestTime": 58.4,
-      "lastActive": 1790622211899
+      "lastActive": 1790763961367
     },
     "RACER_TWO": {
       "name": "RACER_TWO",
@@ -125,84 +114,73 @@
       "podiums": 1,
       "races": 1,
       "bestTime": 62.1,
-      "lastActive": 1790622211899
+      "lastActive": 1790763961367
     },
-    "PLAYER": {
-      "name": "PLAYER",
-      "bike": "SPORT",
-      "color": "#ff624b",
-      "points": 118,
-      "wins": 0,
-      "podiums": 1,
-      "races": 2,
-      "bestTime": 83.656418525023,
-      "lastActive": 1790622211998
-    },
-    "PHONE 1": {
-      "name": "PHONE 1",
+    "WINNER": {
+      "name": "WINNER",
       "bike": "SPORT",
       "color": "#ff624b",
       "points": 145,
       "wins": 1,
       "podiums": 1,
       "races": 1,
-      "bestTime": 75.14559072284949,
-      "lastActive": 1790622226967
+      "bestTime": 76.66990934627975,
+      "lastActive": 1790763961434
+    },
+    "PHONE 1": {
+      "name": "PHONE 1",
+      "bike": "SPORT",
+      "color": "#ff624b",
+      "points": 50,
+      "wins": 0,
+      "podiums": 0,
+      "races": 1,
+      "bestTime": 98.53580328323467,
+      "lastActive": 1790763979641
     },
     "PHONE 2": {
       "name": "PHONE 2",
       "bike": "SPORT",
       "color": "#45d6b0",
-      "points": 60,
+      "points": 85,
       "wins": 0,
-      "podiums": 0,
+      "podiums": 1,
       "races": 1,
-      "bestTime": 77.6894073634308,
-      "lastActive": 1790622226967
+      "bestTime": 78.4369146098076,
+      "lastActive": 1790763979641
     },
     "PHONE 3": {
       "name": "PHONE 3",
       "bike": "SPORT",
       "color": "#a99bff",
-      "points": 100,
+      "points": 120,
       "wins": 0,
       "podiums": 1,
       "races": 1,
       "bestTime": 76.35123781376835,
-      "lastActive": 1790622226967
+      "lastActive": 1790763979641
     },
     "PHONE 4": {
       "name": "PHONE 4",
       "bike": "SPORT",
       "color": "#ffc64b",
-      "points": 120,
-      "wins": 0,
+      "points": 145,
+      "wins": 1,
       "podiums": 1,
       "races": 1,
-      "bestTime": 75.61129412832588,
-      "lastActive": 1790622226967
+      "bestTime": 75.57129412832587,
+      "lastActive": 1790763979641
     },
     "PHONE 5": {
       "name": "PHONE 5",
       "bike": "SPORT",
       "color": "#64c9ff",
-      "points": 65,
+      "points": 60,
       "wins": 0,
       "podiums": 0,
       "races": 1,
-      "bestTime": 80.35987069893633,
-      "lastActive": 1790622226967
-    },
-    "KALPA": {
-      "name": "Kalpa",
-      "bike": "SPORT",
-      "color": "#ffc64b",
-      "points": 131,
-      "wins": 0,
-      "podiums": 1,
-      "races": 3,
-      "bestTime": 91.74392915303953,
-      "lastActive": 1790624324030
+      "bestTime": 86.92499147188279,
+      "lastActive": 1790763979641
     }
   }
 }

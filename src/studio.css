@@ -214,3 +214,46 @@ button { transition: background .16s, border-color .16s, transform .16s; }
   .phone .control small { font-size: 8px; }
 }
 @media (prefers-reduced-motion:reduce) { button { transition: none; } }
+
+/* Keep the physical Blender controls beside their labels, never behind them. */
+.phone .control:has(.control-3d-bg) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 5px; padding: 10px; }
+.phone .control .control-3d-bg { position: static; width: 100%; height: 100%; max-height: 100px; transform: none; opacity: 1; filter: drop-shadow(0 5px 6px #0003); }
+.phone .control .control-3d-bg.flipped-x { transform: scaleX(-1); }
+.phone .control.pressed .control-3d-bg { transform: scale(.94); }
+.phone .control.right.pressed .control-3d-bg { transform: scaleX(-1) scale(.94); }
+.phone .control-inner { text-shadow: none; }
+.phone .control.steer-btn { grid-template-columns: 1fr; grid-template-rows: minmax(0,1fr) auto; justify-items: center; }
+.phone .control.steer-btn .control-3d-bg { max-height: 115px; }
+.phone .control.steer-btn .control-inner b { font-size: 26px; line-height: 1; }
+.phone .control.steer-btn small { margin-top: 4px; }
+.phone .control .control-inner small { line-height: 1.5; }
+.phone:has(.ready-overlay) .controller-footer-bar { visibility: hidden; }
+@media (max-height:500px) and (orientation:landscape) {
+  .phone .control.boost-btn b, .phone .control.brake-btn b { font-size: 22px; }
+  .phone .control small { font-size: 7px; letter-spacing: .6px; }
+  .phone .control .control-3d-bg { max-height: 90px; }
+}
+@media (max-width:360px) {
+  .phone:not(.playing) { padding-inline: 16px; }
+  .phone .colors { gap: 4px; }
+  .phone .ready-overlay { padding: 16px; gap: 10px; }
+  .ready-bike-art { height: 110px; }
+  .phone .ready-overlay h2 { font-size: 30px; }
+}
+
+/* Route guidance stays within each rider's view, above the road surface. */
+.navigation-notice { position: absolute; top: 132px; left: 12px; max-width: calc(100% - 24px); display:flex; align-items:center; gap:10px; padding:10px 13px; border-radius:10px; background:rgba(22,63,54,.94); border:1px solid #a9cfb84d; color:#f5f5e8; box-shadow:0 4px 16px #0003; pointer-events:none; }
+.navigation-notice b { display:block; font:700 13px "DM Sans",sans-serif; }
+.navigation-notice small { display:block; margin-top:4px; font-size:11px; color:#d5e7db; }
+.navigation-symbol { font-size:25px; line-height:1; }
+.navigation-red,.navigation-police { background:rgba(104,36,40,.96);border-color:#ff8a75; }
+.navigation-red .navigation-symbol { color:#ff6653; }
+.navigation-amber { background:rgba(94,66,25,.96);border-color:#efca68; }
+.navigation-amber .navigation-symbol { color:#ffca51; }
+.navigation-green .navigation-symbol { color:#5fea91; }
+@media(max-height:550px), (max-width:600px) {
+ .navigation-notice { top:94px; left:7px; padding:6px 8px; gap:6px; max-width:calc(100% - 14px); }
+ .navigation-notice b { font-size:10px; }
+ .navigation-notice small { font-size:9px; margin-top:2px; }
+ .navigation-symbol { font-size:18px; }
+}

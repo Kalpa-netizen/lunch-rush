@@ -1,3 +1,4 @@
+import { createNavigationDetector } from "../../shared/traffic.js";
 // Sound events come from authoritative snapshots, never from render-frame timing.
 export function createRaceEventDetector() {
   let previous = null;
@@ -18,6 +19,8 @@ export function createRaceEventDetector() {
         for (const p of state.players) {
           const old = previous.players.find((o) => o.id === p.id);
           if (!old) continue;
+          if (p.policeUntil > state.now && p.policeUntil !== old.policeUntil)
+            events.push("police");
           if (p.boosting && !old.boosting) events.push("boost");
           const crashed = p.crashed || p.crashTimer > 0;
           const wasCrashed = old.crashed || old.crashTimer > 0;
@@ -92,7 +95,40 @@ export function createEngineAudio() {
 
   const detect = createRaceEventDetector(),
     lastSound = new Map();
-  let closed = false;
+  let closed = false,
+    pendingGuidance = null,
+    spokenRace = null,
+    guidanceStatus = "ready",
+    lastGuidance = "";
+  const detectNavigation = createNavigationDetector();
+  const speech = window.speechSynthesis;
+  const canSpeak = Boolean(speech && window.SpeechSynthesisUtterance);
+  function say(text) {
+    if (!canSpeak || closed) return;
+    const utterance = new window.SpeechSynthesisUtterance(text);
+    utterance.lang = "en-IN";
+    utterance.rate = 1.05;
+    utterance.volume = 0.95;
+    const voices = speech.getVoices();
+    const voice =
+      voices.find((v) => v.lang === "en-IN") ||
+      voices.find((v) => v.lang.startsWith("en"));
+    if (voice) utterance.voice = voice;
+    utterance.onstart = () => {
+      guidanceStatus = "speaking";
+      lastGuidance = text;
+    };
+    utterance.onend = () => {
+      guidanceStatus = "ready";
+    };
+    utterance.onerror = (event) => {
+      if (!["canceled", "interrupted"].includes(event.error))
+        guidanceStatus = "unavailable";
+    };
+    speech.speak(utterance);
+  }
+  // Called from the sound button gesture, which unlocks browser speech playback.
+  say("Route guidance on.");
 
   const noiseBuffer = ctx.createBuffer(
       1,
@@ -156,7 +192,17 @@ export function createEngineAudio() {
     if (now - (lastSound.get(event) ?? -10) < spacing) return;
     lastSound.set(event, now);
 
-    if (event === "countdown") {
+    if (event === "police") {
+      for (let i = 0; i < 4; i++)
+        tone(
+          i % 2 ? 950 : 620,
+          i % 2 ? 620 : 950,
+          0.32,
+          0.28,
+          "triangle",
+          i * 0.3,
+        );
+    } else if (event === "countdown") {
       // Punchy arcade countdown beep
       tone(784, 784, 0.15, 0.48, "square");
       tone(1568, 1568, 0.12, 0.25, "sine");
@@ -221,11 +267,31 @@ export function createEngineAudio() {
 
   return {
     ready,
+    get guidanceState() {
+      return canSpeak ? guidanceStatus : "unavailable";
+    },
+    get lastGuidance() {
+      return lastGuidance;
+    },
     get state() {
       return ctx.state;
     },
     update(state) {
       if (closed || !state) return;
+      if (canSpeak) {
+        if (state.phase !== "racing" || spokenRace !== state.raceId) {
+          if (spokenRace !== null) speech.cancel();
+          pendingGuidance = null;
+          spokenRace = state.phase === "racing" ? state.raceId : null;
+        }
+        const cue = detectNavigation(state);
+        if (cue) pendingGuidance = cue;
+        if (pendingGuidance && (!speech.speaking || pendingGuidance.urgent)) {
+          if (pendingGuidance.urgent) speech.cancel();
+          say(pendingGuidance.speech);
+          pendingGuidance = null;
+        }
+      }
       const active = state.phase === "racing",
         countdown = state.phase === "countdown",
         racers = state.players.filter((p) => p.racing && !p.finished),
@@ -260,6 +326,7 @@ export function createEngineAudio() {
     close() {
       if (closed) return;
       closed = true;
+      if (canSpeak) speech.cancel();
       osc.stop();
       sub.stop();
       hum.stop();

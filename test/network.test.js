@@ -80,7 +80,13 @@ test("five real WebSocket controllers: isolated inputs, automatic start, finish 
   }
   assert.equal(room.phase, "results");
   assert.ok(room.players.every((p) => p.finished));
-  assert.equal(room.players[4].position, 5);
+  // Traffic and signals can reshuffle riders; ranks must match actual crossing times.
+  assert.deepEqual(
+    [...room.players]
+      .sort((a, b) => a.finishTime - b.finishTime)
+      .map((p) => p.position),
+    [1, 2, 3, 4, 5],
+  );
   const next = new Promise((resolve) => {
     const handler = (s) => {
       if (s.phase === "results") {

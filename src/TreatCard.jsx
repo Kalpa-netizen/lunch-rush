@@ -16,7 +16,7 @@ export default function TreatCard({ award, compact = false }) {
         <span className="treat-mini-emoji">{award.treat.icon}</span>
       </div>
       <div className="treat-copy">
-        <span className="eyebrow">✨ 3D GOLDEN BENTO TROPHY UNLOCKED</span>
+        <span className="eyebrow">SURPRISE TROPHY UNLOCKED</span>
         <h2>
           {award.winnerName} wins {award.treat.name}!
         </h2>

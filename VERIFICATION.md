@@ -42,3 +42,17 @@ A live two-driver race reached the new podium and revealed “a bag of chips” 
 ## Tyre visual and crash sound fix
 
 Removed the team-colored underglow rectangle and changed the rectangular contact shadow to an oval. Added a separate crash sound combining impact, metal rattle and scrape. Four audio tests pass, including one cue per crash, recovery/re-crash, and timer-only crash states. The production build passed. Audio still requires the TV sound control to be enabled.
+
+## Blender interface refresh — 2026-09-29
+
+The desktop lobby uses Blender city artwork and the phone garage includes six bike previews. Blender-generated gas, brake, boost, and steering controls were re-rendered from elevated cameras, and their artwork now sits beside the labels. Steering directions were checked visually after correcting the mirrored icon. Editable sources are `art/lunch-rush-studio.blend`, `art/lunch-rush-ui.blend`, and the accompanying Python generators.
+
+Production build and all 32 automated tests passed. Browser inspection verified the desktop lobby at 1440 × 900 and the controller at 390 × 844 and 844 × 390. Both controller orientations fit without page overflow, with every control larger than 44 × 44 pixels. Bike selection, joining, solo AI countdown, rematch, and the trophy screen were inspected. Mobile browser warning/error logs were empty. Test riders were removed and the room returned to the lobby. Physical phone multi-touch and speaker output were not tested in this pass.
+
+The Wi-Fi address changed during development; the server now reads current network interfaces when `/api/network` is requested, so refreshing the lobby updates the QR address without a server restart.
+
+## Reference-inspired road environment — 2026-09-29
+
+Replaced the faceted tree blobs with seeded, instanced evergreen branches using needle textures and cutout foliage. Added continuous galvanized W-profile guardrails and posts outside the playable lane limits, granular asphalt and gravel textures, grass-covered banks, and a procedural daylight cloud sky. Opened up the parkway and riverside skyline while keeping the city endpoints, culvert, and gameplay obstacles. Disabled the hard-edged streetlight cones/pools that obscured the new surfaces at night. No remote artwork or texture downloads are required.
+
+Production build and all 32 tests pass (network tests require permission to bind local loopback sockets). Browser verification at 1280 × 800 showed both chase views rendering at the 30 FPS target. At 844 × 390 the page dimensions matched the viewport, without overflow. Day/night switching and the raised culvert were inspected, with no browser warning/error logs. Actual device GPU performance was not measured. A screenshot is saved alongside the project as `../lunch-rush-roadside-preview.png`. Temporary demo drivers were stopped after verification; daylight remains selected.

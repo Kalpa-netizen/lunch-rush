@@ -384,7 +384,7 @@ for y in [-0.4, -0.2, 0.0, 0.2, 0.4]:
     rib.dimensions = (0.6, 0.08, 0.06)
     rib.data.materials.append(mat_rubber)
 
-add_camera(loc=(0, -3.0, 0.1), target=(0, 0, 0), ortho_scale=2.1)
+add_camera(loc=(1.4, -3.0, 4.5), target=(0, 0, 0), ortho_scale=1.9)
 render_to("ctrl_gas.png", 512)
 
 # (B) Brake Pedal
@@ -407,7 +407,7 @@ for y in [-0.4, -0.2, 0.0, 0.2, 0.4]:
     brib.dimensions = (0.6, 0.08, 0.06)
     brib.data.materials.append(mat_rubber)
 
-add_camera(loc=(0, -3.0, 0.1), target=(0, 0, 0), ortho_scale=2.1)
+add_camera(loc=(1.4, -3.0, 4.5), target=(0, 0, 0), ortho_scale=1.9)
 render_to("ctrl_brake.png", 512)
 
 # (C) Arcade Nitro Boost Button
@@ -433,7 +433,7 @@ bolt.dimensions = (0.15, 0.4, 0.04)
 bolt.rotation_euler = (0, 0, math.pi/6)
 bolt.data.materials.append(mat_yellow_glow)
 
-add_camera(loc=(0, -3.0, 0.15), target=(0, 0, 0.05), ortho_scale=2.0)
+add_camera(loc=(1.2, -3.0, 4.5), target=(0, 0, 0.05), ortho_scale=2.0)
 render_to("ctrl_boost.png", 512)
 
 # (D) Steering Left & Right Controls
@@ -452,7 +452,7 @@ bpy.ops.mesh.primitive_cylinder_add(vertices=3, radius=0.48, depth=0.12, locatio
 steer_arrow = bpy.context.object
 steer_arrow.data.materials.append(mat_white_glow)
 
-add_camera(loc=(0, -3.0, 0), target=(0, 0, 0), ortho_scale=2.0)
+add_camera(loc=(0, -2.0, 5), target=(0, 0, 0), ortho_scale=1.9)
 render_to("ctrl_steer.png", 512)
 
 # (E) Star Badge for Leaderboard / Podium
@@ -466,4 +466,5 @@ star_3d.data.materials.append(get_mat('Gold', (1.0, 0.78, 0.18), metallic=0.92, 
 add_camera(loc=(0, -3.0, 0), target=(0, 0, 0), ortho_scale=2.0)
 render_to("badge_star.png", 512)
 
+bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, 'art', 'lunch-rush-ui.blend'), copy=True)
 print("All Blender UI Assets generated successfully!")
